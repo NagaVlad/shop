@@ -6,6 +6,9 @@ import './App.css'
 import axios from 'axios'
 import ReactPaginate from 'react-paginate';
 
+
+import Search from './Search'
+
 export default class App extends React.Component {
 
 
@@ -277,6 +280,12 @@ export default class App extends React.Component {
 
         <button className="btn blue" onClick={() => this.setState({ modalReg: true })}>Регистрация</button>
         <hr />
+        <div className="container" >
+          <h3>Поиск товара</h3>
+          <Search
+            data={this.state.itog}
+          />
+        </div>
       </>
 
     )
