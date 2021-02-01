@@ -21,7 +21,6 @@ class ProductFilterResults extends Component {
                console.log('СОРТИРОВАННЫЙ', results);
             }
 
-
             let show = results.map((pd, index) =>
                <React.Fragment>
                   <div className="col s3 offset-s1" key={index}>
@@ -43,24 +42,14 @@ class ProductFilterResults extends Component {
                   </div>
                </React.Fragment>)
          });
-
       }
-
 
       return (
          <div>
             <h1>Результат сортировки</h1>
             {this.state.show}
          </div>
-
-         // <div className="filter-results">
-         //    <ul className="blocks blocks_3up">
-         //       {results}
-         //    </ul>
-         // </div>
       )
    }
 }
-
-
 export default ProductFilterResults

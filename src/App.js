@@ -2,15 +2,11 @@ import React from 'react';
 import Cart from './Cart';
 import Registration from './Registration'
 import './App.css'
-
 import axios from 'axios'
 import ReactPaginate from 'react-paginate';
-
-
 import Search from './Search'
-
 import ProductFilter from './Filter/ProductFilter'
-
+import ProductItem from './ProductItem'
 export default class App extends React.Component {
 
 
@@ -19,27 +15,28 @@ export default class App extends React.Component {
     this.state = {
       modal: false,
       modalReg: false,
-      // data2: [],
       cart: [],
       isEmpty: 'true',
       total: 0,
-
-
       itog: [],
       offset: 0,
       data: [],
       perPage: 10,
-      currentPage: 0
+      currentPage: 0,
+      postData: [],
+
+      checkChecked: [],
+      arrayRef: []
 
     }
-    this.deleteHandler = this.deleteHandler.bind(this)
 
-    this.handlePageClick = this.handlePageClick.bind(this);
+    this.deleteHandler = this.deleteHandler.bind(this)
+    // this.handlePageClick = this.handlePageClick.bind(this);
+
   }
 
 
 
-  //!!
   handlePageClick = (e) => {
     const selectedPage = e.selected;
     const offset = selectedPage * this.state.perPage;
@@ -50,10 +47,8 @@ export default class App extends React.Component {
     }, () => {
       this.receivedData()
     });
-
   };
 
-  // !!
   receivedData() {
     axios
       .get(`https://api.punkapi.com/v2/beers`)
@@ -61,113 +56,79 @@ export default class App extends React.Component {
 
         const data = res.data;
         const slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
+
+
+        const arrayRef = Array.from({
+          length: slice.length
+        })
+          .map(() => React.createRef())
+
+
         const postData = slice.map((pd, index) =>
-          <React.Fragment>
-            {/* <p>{pd.name}</p>
-          <div className="card-action">
-            <label>
-              <input type="checkbox" onChange={() => this.addCart(pd.name)} />
-              <span>Add to cart</span>
-            </label> */}
 
-
-            {/* ...... */}
-            {/* <div className="row"> */}
-            <div className="col s3 offset-s1" key={index}>
-              <div className="card">
-                <div className="card-image">
-                  <img src={pd.image_url} />
-                  <span className="card-title red-text">{pd.name}</span>
-                </div>
-                <div className="card-content">
-                  <p>99 $</p>
-                </div>
-                <div className="card-action">
-                  <label>
-                    <input type="checkbox" onChange={() => this.addCart(pd.name)} />
-                    <span>Add to cart</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-            {/* </div> */}
-            {/* .............. */}
-            {/* </div> */}
-            {/* {console.log(pd)} */}
-
-            {/* <img src={pd.thumbnailUrl} alt="" /> */}
-          </React.Fragment>)
+          React.forwardRef((props, ref) => <ProductItem
+            innerRef={this.state.arrayRef[index]}
+            key={index}
+            pd={pd}
+            addCart={this.addCart}
+          />
+          ))
 
         this.setState({
           pageCount: Math.ceil(data.length / this.state.perPage),
           itog: data,
-          postData
+          postData,
+          arrayRef
         })
-      });
+      })
   }
-
 
   componentDidMount() {
-
-    // fetch('https://api.punkapi.com/v2/beers?ibu_lt=1')
-
-    // fetch('https://api.punkapi.com/v2/beers?page=5&per_page=10')
-    //   .then((res) => res.json())
-    //   .then((data2) => {
-    //     this.setState({ data2: [...data2] })
-
-    //   });
-
     this.receivedData()
   }
+  //ДОБАВЛЯЮ В КОРЗИНУ!!!!!!!!!!!!!!
+  addCart = (Name, e, index) => {
+    // console.log('СОСТОЯНИЕ ЧЕКБОКСА', e.target.getAttribute('data'));
+    // console.log('СОСТОЯНИЕ ЧЕКБОКСА', e.target.getAttribute('data'));
+    if (e.target.checked) {
+      // console.log(Name);
+      const Product = this.state.itog.find((elem) => {
+        return elem.name === Name
+      });
 
-  addCart(Id) {
-    console.log(Id);
-    const Product = this.state.itog.find((elem) => {
-      // console.log('ЭТОТ ИЩУ', elem.name);
-      return elem.name === Id
-    });
+      //!!
+      // const x = e.target.getAttribute('data')
+      const { id, name, image_url } = Product;
+      const newArr = [id, name, image_url]
+
+      this.setState({
+        cart: this.state.cart.concat([newArr]),
+        isEmpty: 'false'
+      }, this.counterHandler);
+    } else {
+      console.log('Удаляю');
+      // console.log(this.state.cart.splice(index, 1));
+
+      this.deleteHandler(index[0], e)
 
 
-    const { id, name, image_url } = Product;
-    const newArr = [id, name, image_url]
-    this.setState({
-      cart: this.state.cart.concat([newArr]),
-      isEmpty: 'false'
-      // });
-    }, this.counterHandler);
 
+      // this.state.cart.splice(index[0], 1);
+      // this.setState(
+      //   (prevState) => ({ cart: [...prevState.cart] }),
+      //   this.counterHandler
+      // );
+    }
 
-
-    // console.log(Product);
-    // // console.log(Product);
-    // const { id, name, image_url } = Product;
-    // console.log(id, name, image_url);
-    // const newObject = { id, name, image_url }
-    // const newArr = [id, name, image_url]
-    // // this.setState({ cart: this.state.cart.push(id) });
-
-    // this.setState({
-    //   cart: this.state.cart.concat([newArr]),
-    //   isEmpty: 'false'
-    //   // }, this.counterHandler);
-    // });
-
-    // // this.setState({ cart: [...this.state.cart, ...newArr] });
-
-    // this.setState({
-    //   cart: this.state.cart.push(newObject)
-    // })
-    // // console.log('STATE', this.state.cart);
   }
 
   counterHandler = () => {
-    console.log('ТОТАЛ', this.state.total)
+    // console.log('ТОТАЛ', this.state.total)
     this.setState({
 
       total: this.state.cart.reduce((acc, currentValue) => {
-        console.log('ACC', acc)
-        console.log('currentValue', currentValue)
+        // console.log('ACC', acc)
+        // console.log('currentValue', currentValue)
         return Number(acc) + Number(currentValue[0])
       }, 0)
     })
@@ -175,9 +136,19 @@ export default class App extends React.Component {
 
   }
 
-  deleteHandler(index) {
+  deleteHandler(index, x) {
+    // console.log('xxxxxxxx', x);
+    // console.log(e);
+    // if (e) {
+    //   e.target.checked = false
+    // }
+
+
+
+
     // console.log('delete', index);
     this.state.cart.splice(index, 1)
+
     this.setState(
       (prevState) => ({ cart: [...prevState.cart] }),
       // () => { console.log(this.state.total) }
@@ -186,71 +157,22 @@ export default class App extends React.Component {
     console.log('Новое', this.state.cart);
   }
 
+
+  // getRef = (node) => { this.el = node }
+
   render() {
     return (
       <>
-        {/* <div className="container">
-          <h1>Каталог Товаров</h1>
-
-          <hr />
-
-
-          <button className="btn green" onClick={
-            () => {
-              this.setState({ modal: true })
-            }
-          }>Корзина</button>
-          <button className="btn blue" onClick={() => this.setState({ modalReg: true })}>Регистрация</button>
-          <hr />
-
-          <div className="row">
-
-            {this.state.data2.length ?
-              this.state.data2.map((elem, index) => (
-                <div className="col s3 offset-s1" key={index}>
-                  <div className="card">
-                    <div className="card-image">
-                      <img src={elem.image_url} />
-                      <span className="card-title red-text">{elem.name}</span>
-                    </div>
-                    <div className="card-content">
-                      <p>99 $</p>
-                    </div>
-                    <div className="card-action">
-                      <label>
-                        <input type="checkbox" onChange={() => this.addCart(elem.id)} />
-                        <span>Add to cart</span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              ))
-
-              :
-              <h3 className="grey-text">No products</h3>
-            }
-          </div>
-
-        </div>
-
-        { this.state.modal ? <Cart
-          close={() => this.setState({ modal: false })}
-          cart={this.state.cart}
-          isEmpty={this.state.isEmpty}
-          total={this.state.total}
-          deleteHandler={this.deleteHandler}
-        // counterHandler={this.counterHandler}
-        /> : null}
-
-        { this.state.modalReg ? <Registration close={() => this.setState({ modalReg: false })} /> : null} */}
-        {/* <div className="container"> */}
-
         <h1>Каталог товаров</h1>
 
         <div className="row">
           {this.state.postData}
         </div>
-        {/* </div> */}
+
+
+        <div className="row">
+          {/* {this.state.itog} */}
+        </div>
 
         <ReactPaginate
           previousLabel={"prev"}
@@ -281,11 +203,10 @@ export default class App extends React.Component {
           </button>
 
         <button className="btn blue" onClick={() => this.setState({ modalReg: true })}>Регистрация</button>
+
         <hr />
 
-
-
-        {/*!!! РАСКОММЕНТИРОВАТЬ <div className="container" >
+        {/* <div className="container" >
           <h3>Поиск товара</h3>
           <Search
             data={this.state.itog}
@@ -296,10 +217,7 @@ export default class App extends React.Component {
           data={this.state.itog}
         />
 
-
-
       </>
-
     )
   }
 }

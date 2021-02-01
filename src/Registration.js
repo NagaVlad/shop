@@ -2,38 +2,21 @@ import React from 'react';
 
 export default class Registration extends React.Component {
 
-   // constructor(props) {
-   //    super(props);
-   // var name = props.name;
-   // var surname = props.surname;
-   // var validName = props.validName;
-
-   // var age = props.age;
-   // var ageIsValid = this.validateAge(age);
-   // this.state = {name: name, age: age, nameValid: nameIsValid, ageValid: ageIsValid};
-
    onNameChange = this.onNameChange.bind(this);
    onSurnameChange = this.onSurnameChange.bind(this);
    onPasswordChange = this.onPasswordChange.bind(this);
    onPasswordChange2 = this.onPasswordChange2.bind(this);
-   // this.onAgeChange = this.onAgeChange.bind(this);
-   // this.handleSubmit = this.handleSubmit.bind(this);
 
    state = {
       name: 'name',
       validName: 'false',
-
       surname: 'surname',
       validSurname: 'false',
-
       password: '',
       validPassword: 'false',
-
       password2: '',
       validPassword2: 'false',
    };
-   // }
-
 
    onNameChange(e) {
       var val = e.target.value;
@@ -57,7 +40,6 @@ export default class Registration extends React.Component {
       console.log(this.state.validSurname);
    }
 
-
    onPasswordChange(e) {
       var val = e.target.value;
       console.log(val);
@@ -77,8 +59,6 @@ export default class Registration extends React.Component {
          this.setState({ validPassword2: 'false' });
       }
    }
-
-
 
    render() {
       return (
@@ -104,12 +84,11 @@ export default class Registration extends React.Component {
                         </div>
 
                         <div className="row">
-                           <div class="input-field col s12">
+                           <div className="input-field col s12">
                               <input type="date" className="datepicker" id="pickdate" />
                               {/* <label for="pickdate">Дата рождения</label> */}
                            </div>
                         </div>
-
 
                         <div className="row">
                            <div className="input-field col s12">
@@ -136,10 +115,6 @@ export default class Registration extends React.Component {
                            </div>
                         </div>
 
-
-
-
-
                         {this.state.validName === 'true' && this.state.validSurname === 'true' && this.state.validPassword === 'true' && this.state.validPassword2 === 'true'
                            ? <button className="btn waves-effect waves-light" type="submit" name="action">Submit
                         <i className="material-icons right">send</i>
@@ -150,13 +125,7 @@ export default class Registration extends React.Component {
                   </div>
                </div>
             </div>
-
-
          </>
-
       )
    }
 }
-
-
-// ФИО, дата рождения, пароль, почта.

@@ -2,10 +2,10 @@
 import React, { Component } from "react"
 import ProductFilterMenu from './ProductFilterMenu'
 import ProductFilterResults from './ProductFilterResults'
+
 class ProductFilter extends Component {
    constructor(props) {
       super(props);
-
       this.handleFormInput = this.handleFormInput.bind(this);
 
       this.state = {
@@ -13,7 +13,6 @@ class ProductFilter extends Component {
          abv: 12,
          checked: false
       }
-
       this.handleChange = this.handleChange.bind(this)
    }
 
@@ -24,14 +23,12 @@ class ProductFilter extends Component {
       })
    }
 
-
    handleChange() {
       this.setState(
          (prevState) => ({ checked: !prevState.checked }),
          () => { console.log(this.state.checked); }
       )
    }
-
 
    render() {
       return (
@@ -47,7 +44,6 @@ class ProductFilter extends Component {
                abv={this.state.abv}
                checked={this.state.checked}
             />
-
             {/* {console.log(this.props.data)} */}
          </>
       )
