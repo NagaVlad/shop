@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate'
 import Search from './Search'
 import ProductFilter from './Filter/ProductFilter'
 import ProductItem from './ProductItem'
+
 export default class App extends React.Component {
   constructor(props) {
     super(props)
@@ -26,8 +27,6 @@ export default class App extends React.Component {
       checkChecked: [],
       arrayRef: [],
     }
-
-
   }
 
   handlePageClick = (e) => {
@@ -46,14 +45,12 @@ export default class App extends React.Component {
   }
 
   receivedData() {
-
     axios.get(`https://api.punkapi.com/v2/beers`).then((res) => {
       const data = res.data
       const slice = data.slice(
         this.state.offset,
         this.state.offset + this.state.perPage
       )
-
 
       const arrayRef = Array.from({
         length: slice.length,
@@ -72,6 +69,7 @@ export default class App extends React.Component {
   componentDidMount() {
     this.receivedData()
   }
+
   //ДОБАВЛЯЮ В КОРЗИНУ!!!!!!!!!!!!!!
   addCart = (Name, e, index) => {
     if (e.target.checked) {
@@ -80,8 +78,6 @@ export default class App extends React.Component {
         return elem.name === Name
       })
 
-      //!!
-      // const x = e.target.getAttribute('data')
       const { id, name, image_url } = Product
       const newArr = [id, name, image_url]
 
@@ -94,29 +90,27 @@ export default class App extends React.Component {
       )
     } else {
       console.log('Удаляю')
-      // console.log(this.state.cart.splice(index, 1));
-
-      this.deleteHandler(index[0], e)
-
-      // this.state.cart.splice(index[0], 1);
-      // this.setState(
-      //   (prevState) => ({ cart: [...prevState.cart] }),
-      //   this.counterHandler
-      // );
+      this.deleteHandler2(index[0], e)
     }
   }
 
   counterHandler = () => {
-    // console.log('ТОТАЛ', this.state.total)
     this.setState({
       total: this.state.cart.reduce((acc, currentValue) => {
-        // console.log('ACC', acc)
-        // console.log('currentValue', currentValue)
         return Number(acc) + Number(currentValue[0])
       }, 0),
     })
-    // }, () => { console.log(this.state.total) })
   }
+
+  deleteHandler2(index) {
+    this.state.cart.splice(index, 1)
+    this.setState(
+      (prevState) => ({ cart: [...prevState.cart] }),
+      this.counterHandler
+    )
+    console.log('Новое', this.state.cart);
+  }
+
 
 
   deleteHandler = (index, id) => {
@@ -132,13 +126,12 @@ export default class App extends React.Component {
     )
   }
 
-  // getRef = (node) => { this.el = node }
-
   render() {
-
     return (
       <>
         <h1>Каталог товаров</h1>
+
+        <h2>Поиск</h2>
 
         <div className='row'>
           {this.state.slice.map((pd, index) => (
