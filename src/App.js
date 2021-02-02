@@ -6,12 +6,16 @@ import axios from 'axios'
 import ReactPaginate from 'react-paginate'
 import Search from './Search'
 import ProductFilter from './Filter/ProductFilter'
-import ProductItem from './ProductItem'
+// import ProductItem from './ProductItem'
+
+
+import ProductLayout from './ProductLayout'
 
 export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+
       modal: false,
       modalReg: false,
       cart: [],
@@ -20,40 +24,50 @@ export default class App extends React.Component {
       itog: [],
       offset: 0,
       data: [],
-      perPage: 10,
+      perPage: 9,
       currentPage: 0,
       postData: [],
       slice: [],
       checkChecked: [],
       arrayRef: [],
+      searchProducts: [],
+
+      searchString: '',
+      startArraySearch: []
     }
   }
 
   handlePageClick = (e) => {
     const selectedPage = e.selected
     const offset = selectedPage * this.state.perPage
-
     this.setState(
       {
         currentPage: selectedPage,
         offset: offset,
-      },
-      () => {
-        this.receivedData()
-      }
+      }, () => { this.receivedData() }
     )
   }
 
   receivedData() {
     axios.get(`https://api.punkapi.com/v2/beers`).then((res) => {
-      const data = res.data
+
+      var data = []
+      if (this.state.searchString.length > 0) {
+        data = this.state.searchProducts
+        // data = res.data
+        console.log('data', data);
+      } else {
+        data = res.data
+        console.log('data', data);
+      }
+
       const slice = data.slice(
         this.state.offset,
         this.state.offset + this.state.perPage
       )
 
       const arrayRef = Array.from({
-        length: slice.length,
+        length: this.state.startArraySearch.length,
       }).map(() => React.createRef())
 
       this.setState({
@@ -61,19 +75,18 @@ export default class App extends React.Component {
         itog: data,
         arrayRef,
         slice,
-
+        startArraySearch: res.data
       })
     })
   }
 
   componentDidMount() {
     this.receivedData()
+    this.searching()
   }
 
-  //ДОБАВЛЯЮ В КОРЗИНУ!!!!!!!!!!!!!!
   addCart = (Name, e, index) => {
     if (e.target.checked) {
-      // console.log(Name);
       const Product = this.state.itog.find((elem) => {
         return elem.name === Name
       })
@@ -90,7 +103,9 @@ export default class App extends React.Component {
       )
     } else {
       console.log('Удаляю')
-      this.deleteHandler2(index[0], e)
+      const refIndex = this.state.startArraySearch.findIndex((el) => el.id === Name)//!!!!!Важно
+      this.deleteHandler2(index[refIndex])
+      // console.log('Че по галке удаляем', index[0]);
     }
   }
 
@@ -112,10 +127,19 @@ export default class App extends React.Component {
   }
 
 
-
   deleteHandler = (index, id) => {
-    const refIndex = this.state.slice.findIndex((el) => el.id === id)
-    this.state.arrayRef[refIndex].current.checked = false
+    const refIndex = this.state.startArraySearch.findIndex((el) => el.id === id)
+
+    console.log('id  c корзины', id);
+    console.log('refIndex', refIndex + 1);
+    console.log('arrayRef', this.state.arrayRef);
+
+
+    // const refIndex = this.state.slice.findIndex((el) => el.id === index)
+    // console.log('xxxxxxxx', this.state.arrayRef);
+    // console.log('xxxxxxxx refINDEX', this.state.arrayRef[refIndex].current);
+
+    this.state.arrayRef[refIndex + 1].current.checked = false
 
     this.state.cart.splice(index, 1)
     this.setState(
@@ -126,42 +150,92 @@ export default class App extends React.Component {
     )
   }
 
+  handleChange = (e) => {
+    console.log('e', e.target.value);
+    this.setState({
+      searchString: e.target.value
+    }, () => this.searching())
+  }
+
+  searching() {
+    let products = this.state.startArraySearch,
+      searchString = this.state.searchString.trim().toLowerCase();
+
+    if (searchString.length > 0) {
+      products = products.filter((el) => {
+        return el.name.toLowerCase().match(searchString);
+      })
+    } else {
+      // console.log('Нет товаров');
+    }
+    console.log('products', products);
+    this.setState({
+      searchProducts: products,
+      searchString
+    }, this.receivedData())
+  }
+
   render() {
     return (
       <>
-        <h1>Каталог товаров</h1>
+        <h1 style={{ textAlign: 'center' }}>Каталог товаров</h1>
+        {/* <input type='text' value={this.state.searchString} onChange={(e) => this.handleChange(e)} /> */}
 
-        <h2>Поиск</h2>
+        {/*Вынести ------- */}
+        <div className="container">
+          <div style={{ display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
+            <button
+              className='btn green'
+              onClick={() => {
+                this.setState({ modal: true })
+              }}>
+              Корзина
+            </button>
 
-        <div className='row'>
-          {this.state.slice.map((pd, index) => (
-            <ProductItem
-              pd={pd}
-              key={index}
-              ref={this.state.arrayRef[index]}
-              addCart={this.addCart}
-            />
-          ))}
+            <button
+              className='btn blue'
+              onClick={() => this.setState({ modalReg: true })}>
+              Регистрация
+          </button>
+          </div>
         </div>
+        {/*Вынести ------- */}
 
-
-        <div className='row'>{/* {this.state.itog} */}</div>
-
-        <ReactPaginate
-          previousLabel={'prev'}
-          nextLabel={'next'}
-          breakLabel={'...'}
-          breakClassName={'break-me'}
-
-          pageCount={this.state.pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={this.handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
+        {/* Поиск */}
+        <Search
+          handleChange={this.handleChange}
+          searchString={this.state.searchString}
+        // data={this.state.itog}
         />
 
+        {/* Layout */}
+        <ProductLayout
+          // slice={this.state.startArraySearch}
+          slice={this.state.slice}
+          arrayRef={this.state.arrayRef}
+          addCart={this.addCart}
+        />
+
+        {/* Пагинация */}
+        <div className="container">
+          <div className="row">
+            <ReactPaginate
+              previousLabel={'prev'}
+              nextLabel={'next'}
+              breakLabel={'...'}
+              breakClassName={'break-me'}
+              pageCount={this.state.pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={'pagination'}
+              subContainerClassName={'pages pagination'}
+              activeClassName={'active'}
+            />
+          </div>
+        </div>
+
+        {/* Корзина */}
         {this.state.modal ? (
           <Cart
             close={() => this.setState({ modal: false })}
@@ -169,37 +243,18 @@ export default class App extends React.Component {
             isEmpty={this.state.isEmpty}
             total={this.state.total}
             deleteHandler={this.deleteHandler}
+          // ref={this.state.arrayRef}//
           />
         ) : null}
 
+        {/* Форма регистрации */}
         {this.state.modalReg ? (
           <Registration close={() => this.setState({ modalReg: false })} />
         ) : null}
 
-        <button
-          className='btn green'
-          onClick={() => {
-            this.setState({ modal: true })
-          }}>
-          Корзина
-        </button>
 
-        <button
-          className='btn blue'
-          onClick={() => this.setState({ modalReg: true })}>
-          Регистрация
-        </button>
-
-        <hr />
-
-        <div className="container" >
-          <h3>Поиск товара</h3>
-          <Search
-            data={this.state.itog}
-          />
-        </div>
-
-        <ProductFilter data={this.state.itog} />
+        {/* Фильтр */}
+        {/* <ProductFilter data={this.state.itog} /> */}
       </>
     )
   }

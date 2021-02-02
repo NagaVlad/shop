@@ -18,6 +18,7 @@ export default class Cart extends React.Component {
    //    )
    // }
 
+
    render() {
       return (
          <>
@@ -32,7 +33,7 @@ export default class Cart extends React.Component {
                   <hr />
                   {/* {this.props.cart.length >= 1 ? this.setState({ isEmpty: 'false' }) : 'null'} */}
                   {/* {this.props.isEmpty === 'false' ? null : <h3 className="grey-text">Нет добавленных продуктов</h3>} */}
-                  {console.log(this.props.cart)}
+                  {console.log('Корзина', this.props.cart)}
                   {this.props.cart.map((elem, index) => {
                      // this.countTotal(elem[0])
                      return (
@@ -53,7 +54,7 @@ export default class Cart extends React.Component {
                                        }}
                                        className='btn red'>
                                        Удалить
-                        </button>
+                                 </button>
                                  </div>
                                  <h1>{index}</h1>
                               </div>

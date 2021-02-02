@@ -7,10 +7,10 @@ const ProducItem = (props) => {
          <div className='card'>
             <div className='card-image'>
                <img src={pd.image_url} />
-               <span className='card-title red-text'>{pd.name}</span>
+               <span className='card-title black-text'>{pd.name}</span>
             </div>
             <div className='card-content'>
-               <p>99 $</p>
+               <p>Цена {pd.id}</p>
             </div>
             <div className='card-action'>
                <label>
@@ -19,7 +19,7 @@ const ProducItem = (props) => {
                      type='checkbox'
                      onChange={(e) => addCart(pd.name, e, pd.id)}
                   />
-                  <span>Add to cart</span>
+                  <span>Добавить в корзину</span>
                </label>
             </div>
          </div>

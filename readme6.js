@@ -67,6 +67,7 @@ export default class App extends React.Component {
             const postData = slice.map((pd, index) =>
 
                React.forwardRef((props, ref) => <ProductItem
+                  // innerRef={this.state.arrayRef[index]}
                   innerRef={this.state.arrayRef[index]}
                   key={index}
                   pd={pd}
