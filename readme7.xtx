@@ -6,7 +6,6 @@ import axios from 'axios'
 import ReactPaginate from 'react-paginate';
 import Search from './Search'
 import ProductFilter from './Filter/ProductFilter'
-import ProductItem from './ProductItem'
 export default class App extends React.Component {
 
 
@@ -22,20 +21,11 @@ export default class App extends React.Component {
       offset: 0,
       data: [],
       perPage: 10,
-      currentPage: 0,
-      postData: [],
-
-      checkChecked: [],
-      arrayRef: []
-
+      currentPage: 0
     }
-
     this.deleteHandler = this.deleteHandler.bind(this)
     this.handlePageClick = this.handlePageClick.bind(this);
-
   }
-
-
 
   handlePageClick = (e) => {
     const selectedPage = e.selected;
@@ -55,58 +45,49 @@ export default class App extends React.Component {
       .then(res => {
 
         const data = res.data;
-        //новый массив
-        //метод фильтрации=новый массив-Ю стейт
-        //рендерю
-
-        //listProd
-        //filter
-
-
         const slice = data.slice(this.state.offset, this.state.offset + this.state.perPage)
-
-
-        // const arrayRef = Array.from({
-        //   length: slice.length
-        // })
-        //   .map(() => React.createRef())
-
-
         const postData = slice.map((pd, index) =>
 
-          <ProductItem
-            // innerRef={this.state.arrayRef[index]}
-            key={index}
-            // key={pd.id}
-            pd={pd}
-            addCart={this.addCart}
-          />
-        )
+          <React.Fragment>
+            <div className="col s3 offset-s1" key={index}>
+              <div className="card">
+                <div className="card-image">
+                  <img src={pd.image_url} />
+                  <span className="card-title red-text">{pd.name}</span>
+                </div>
+                <div className="card-content">
+                  <p>99 $</p>
+                </div>
+                <div className="card-action">
+                  <label>
+                    <input type="checkbox" onChange={(e) => this.addCart(pd.name, e, pd.id)} />
+                    <span>Add to cart</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </React.Fragment>)
 
         this.setState({
           pageCount: Math.ceil(data.length / this.state.perPage),
           itog: data,
-          postData,
-          // arrayRef
+          postData
         })
-      })
+      });
   }
 
   componentDidMount() {
     this.receivedData()
   }
   //ДОБАВЛЯЮ В КОРЗИНУ!!!!!!!!!!!!!!
-  addCart = (Name, e, index) => {
-    // console.log('СОСТОЯНИЕ ЧЕКБОКСА', e.target.getAttribute('data'));
-    // console.log('СОСТОЯНИЕ ЧЕКБОКСА', e.target.getAttribute('data'));
+  addCart(Name, e, index) {
+    console.log('СОСТОЯНИЕ ЧЕКБОКСА', e.target.checked);
     if (e.target.checked) {
       // console.log(Name);
       const Product = this.state.itog.find((elem) => {
         return elem.name === Name
       });
 
-      //!!
-      // const x = e.target.getAttribute('data')
       const { id, name, image_url } = Product;
       const newArr = [id, name, image_url]
 
@@ -118,15 +99,13 @@ export default class App extends React.Component {
       console.log('Удаляю');
       // console.log(this.state.cart.splice(index, 1));
 
-      this.deleteHandler(index[0], e)
+      // this.deleteHandler(index)
 
-
-
-      // this.state.cart.splice(index[0], 1);
-      // this.setState(
-      //   (prevState) => ({ cart: [...prevState.cart] }),
-      //   this.counterHandler
-      // );
+      this.state.cart.splice(index[0], 1);
+      this.setState(
+        (prevState) => ({ cart: [...prevState.cart] }),
+        this.counterHandler
+      );
     }
 
   }
@@ -145,15 +124,9 @@ export default class App extends React.Component {
 
   }
 
-  deleteHandler(index,) {
-    // console.log('xxxxxxxx', x);
-    // console.log(e);
-    // if (e) {
-    //   e.target.checked = false
-    // }
+  deleteHandler(index) {
     // console.log('delete', index);
     this.state.cart.splice(index, 1)
-
     this.setState(
       (prevState) => ({ cart: [...prevState.cart] }),
       // () => { console.log(this.state.total) }
@@ -162,10 +135,7 @@ export default class App extends React.Component {
     console.log('Новое', this.state.cart);
   }
 
-  // getRef = (node) => { this.el = node }
-
   render() {
-
     return (
       <>
         <h1>Каталог товаров</h1>
@@ -174,12 +144,12 @@ export default class App extends React.Component {
           {this.state.postData}
         </div>
 
+
         <div className="row">
           {/* {this.state.itog} */}
         </div>
 
         <ReactPaginate
-
           previousLabel={"prev"}
           nextLabel={"next"}
           breakLabel={"..."}
@@ -211,12 +181,12 @@ export default class App extends React.Component {
 
         <hr />
 
-        <div className="container" >
+        {/* <div className="container" >
           <h3>Поиск товара</h3>
           <Search
             data={this.state.itog}
           />
-        </div>
+        </div> */}
 
         <ProductFilter
           data={this.state.itog}
