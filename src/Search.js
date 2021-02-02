@@ -30,8 +30,8 @@ class Search extends React.Component {
       // console.log('нижинй регистр', searchString);
       return (
          <>
-            {/* <h4>Сортировать по крепости</h4>
-            <button>sord</button> */}
+            <h4>Сортировать по крепости</h4>
+            <button>sord</button>
             <div >
                <input type='text' value={this.state.searchString} onChange={this.handleChange} />
                <ul>

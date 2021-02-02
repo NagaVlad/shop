@@ -26,6 +26,8 @@ export default class App extends React.Component {
       checkChecked: [],
       arrayRef: [],
     }
+
+
   }
 
   handlePageClick = (e) => {
@@ -44,12 +46,14 @@ export default class App extends React.Component {
   }
 
   receivedData() {
+
     axios.get(`https://api.punkapi.com/v2/beers`).then((res) => {
       const data = res.data
       const slice = data.slice(
         this.state.offset,
         this.state.offset + this.state.perPage
       )
+
 
       const arrayRef = Array.from({
         length: slice.length,
@@ -60,6 +64,7 @@ export default class App extends React.Component {
         itog: data,
         arrayRef,
         slice,
+
       })
     })
   }
@@ -113,9 +118,11 @@ export default class App extends React.Component {
     // }, () => { console.log(this.state.total) })
   }
 
+
   deleteHandler = (index, id) => {
     const refIndex = this.state.slice.findIndex((el) => el.id === id)
     this.state.arrayRef[refIndex].current.checked = false
+
     this.state.cart.splice(index, 1)
     this.setState(
       (prevState) => ({
@@ -128,6 +135,7 @@ export default class App extends React.Component {
   // getRef = (node) => { this.el = node }
 
   render() {
+
     return (
       <>
         <h1>Каталог товаров</h1>
@@ -143,6 +151,7 @@ export default class App extends React.Component {
           ))}
         </div>
 
+
         <div className='row'>{/* {this.state.itog} */}</div>
 
         <ReactPaginate
@@ -150,6 +159,7 @@ export default class App extends React.Component {
           nextLabel={'next'}
           breakLabel={'...'}
           breakClassName={'break-me'}
+
           pageCount={this.state.pageCount}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
@@ -189,12 +199,12 @@ export default class App extends React.Component {
 
         <hr />
 
-        {/* <div className="container" >
+        <div className="container" >
           <h3>Поиск товара</h3>
           <Search
             data={this.state.itog}
           />
-        </div> */}
+        </div>
 
         <ProductFilter data={this.state.itog} />
       </>
