@@ -4,46 +4,46 @@ import ProductFilterMenu from './ProductFilterMenu'
 import ProductFilterResults from './ProductFilterResults'
 
 class ProductFilter extends Component {
-   constructor(props) {
-      super(props);
-      this.handleFormInput = this.handleFormInput.bind(this);
+   // constructor(props) {
+   //    super(props);
+   //    this.handleFormInputFilter = this.handleFormInputFilter.bind(this);
 
-      this.state = {
-         series: 0,
-         abv: 12,
-         checked: false
-      }
-      this.handleChangeFilter = this.handleChangeFilter.bind(this)
-   }
+   //    this.state = {
+   //       series: 0,
+   //       abv: 12,
+   //       checked: false
+   //    }
+   //    this.handleChangeFilter = this.handleChangeFilter.bind(this)
+   // }
 
-   handleFormInput(abv, series) {
-      this.setState({
-         series: series,
-         abv: abv
-      })
-   }
+   // handleFormInputFilter(abv, series) {
+   //    this.setState({
+   //       series: series,
+   //       abv: abv
+   //    })
+   // }
 
-   handleChangeFilter() {
-      this.setState(
-         (prevState) => ({ checked: !prevState.checked }),
-         () => { console.log(this.state.checked); }
-      )
-   }
+   // handleChangeFilter() {
+   //    this.setState(
+   //       (prevState) => ({ checked: !prevState.checked }),
+   //       // () => { console.log(this.state.checked); }
+   //    )
+   // }
 
    render() {
       return (
          <>
             <ProductFilterMenu
-               series={this.state.series}
-               abv={this.state.abv}
-               handleChangeFilter={this.handleChangeFilter}
+               series={this.props.series}
+               abv={this.props.abv}
+               handleChangeFilter={this.props.handleChangeFilter}
             />
 
-            <ProductFilterResults
+            {/* <ProductFilterResults
                data={this.props.data}
-               abv={this.state.abv}
-               checked={this.state.checked}
-            />
+               abv={this.props.abv}
+               checked={this.props.checked}
+            /> */}
             {/* {console.log(this.props.data)} */}
          </>
       )

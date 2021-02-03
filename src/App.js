@@ -42,8 +42,18 @@ export default class App extends React.Component {
       startArraySearch: [],//Все товары
 
 
-      modal2: true
+      modal2: true,
+
+
+      //ФИЛЬТР
+      series: 0,
+      abv: 12,
+      checked2: false,
+      filtredProduct: []
     }
+
+    this.handleFormInputFilter = this.handleFormInputFilter.bind(this);
+    this.handleChangeFilter = this.handleChangeFilter.bind(this)
   }
 
   handlePageClick = (e) => {
@@ -90,7 +100,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    this.receivedData()
+    // this.receivedData()
     this.searching()//!!
   }
 
@@ -170,6 +180,8 @@ export default class App extends React.Component {
     )
   }
 
+
+  //*ПОИСК
   handleChange = (e) => {
     console.log('e', e.target.value);
     this.setState({
@@ -193,6 +205,47 @@ export default class App extends React.Component {
       searchProducts: products,
       searchString
     }, this.receivedData())
+  }
+
+
+
+  //*ФИЛЬТР
+  handleFormInputFilter(abv, series) {
+    this.setState({
+      series: series,
+      abv: abv
+    })
+  }
+
+  handleChangeFilter() {
+    this.setState(
+      (prevState) => ({ checked2: !prevState.checked2 }),
+      () => { console.log(this.state.checked2); }
+    )
+  }
+
+  handleFiltred() {
+    var results = [];
+
+    this.state.startArraySearch.map((product) => {
+      if (this.state.abv < product.abv) {
+        results.push(product);
+        console.log('Фильтрованный', results);
+      }
+      this.state.filtredProduct = results
+      // this.setState({
+      //   filtredProduct: [1]
+      // })
+    });
+
+    console.log('Фильтрую');
+    console.log('startArraySearch', this.state.startArraySearch);
+    console.log('filtredProduct', this.state.filtredProduct = results);
+    // this.setState(
+    //   (prevState) => ({ filtredProduct: results }),
+    //   () => { console.log(this.state.filtredProduct); }
+    // )
+
   }
 
   render() {
@@ -328,7 +381,20 @@ export default class App extends React.Component {
         ) : null}
 
         {/* Фильтр */}
-        <ProductFilter data={this.state.itog} />
+        <ProductFilter
+          data={this.state.itog}
+
+          series={this.state.series}
+          abv={this.state.abv}
+          handleChangeFilter={this.handleChangeFilter}
+
+          data={this.state.data}
+          abv={this.state.abv}
+          checked={this.state.checked}
+        />
+
+
+        {this.state.checked2 ? this.handleFiltred() : null}
 
         {/* <Modal
           modal2={this.state.modal2}
