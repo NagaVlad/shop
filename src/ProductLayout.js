@@ -20,12 +20,13 @@ export default class ProductLayout extends React.Component {
             ))} */}
 
             {/* {console.log('this.props.slice', this.props.slice)} */}
-            {this.props.slice.map((pd, index) => (
+            {this.props.filtredByNameData.map((pd, index) => (
                <ProductItem
                   pd={pd}
                   key={index}
-                  ref={this.props.arrayRef[pd.id]}
-                  addCart={this.props.addCart}
+                  ref={this.props.arrayRef[index]}
+                  addToCart={this.props.addToCart}
+                  buttonDeleteClickHandler={this.props.buttonDeleteClickHandler}
                />
             ))}
 

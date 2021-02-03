@@ -9,9 +9,11 @@ export default class HomeLayout extends React.Component {
       return (
          <div>
             <ProductLayout
-               slice={this.props.slice}//Сделал так
+               filtredByNameData={this.props.filtredByNameData}//Сделал так
                arrayRef={this.props.arrayRef}
-               addCart={this.props.addCart} />
+               addToCart={this.props.addToCart}
+               buttonDeleteClickHandler={this.props.buttonDeleteClickHandler}
+            />
             {/* {console.log('ПРОПСЫ', this.props)} */}
             <div className="container">
                <div className="row">
