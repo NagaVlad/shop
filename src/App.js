@@ -264,7 +264,7 @@ export default class App extends React.Component {
         {/* Router */}
         <Route path="/" exact render={() => <HomeLayout
           // slice={this.state.itog}//Сделал так
-          slice={this.state.startArraySearch}//!!ТУТ ЕСТЬ ОШИБКА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          slice={this.state.searchProducts}//!!ТУТ ЕСТЬ ОШИБКА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           // slice={this.state.slice}
           arrayRef={this.state.arrayRef}
           addCart={this.addCart}
@@ -328,7 +328,7 @@ export default class App extends React.Component {
         ) : null}
 
         {/* Фильтр */}
-        {/* <ProductFilter data={this.state.itog} /> */}
+        <ProductFilter data={this.state.itog} />
 
         {/* <Modal
           modal2={this.state.modal2}

@@ -12,7 +12,7 @@ export default class HomeLayout extends React.Component {
                slice={this.props.slice}//Сделал так
                arrayRef={this.props.arrayRef}
                addCart={this.props.addCart} />
-            {console.log('ПРОПСЫ', this.props)}
+            {/* {console.log('ПРОПСЫ', this.props)} */}
             <div className="container">
                <div className="row">
 

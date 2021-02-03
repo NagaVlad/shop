@@ -13,7 +13,7 @@ class ProductFilter extends Component {
          abv: 12,
          checked: false
       }
-      this.handleChange = this.handleChange.bind(this)
+      this.handleChangeFilter = this.handleChangeFilter.bind(this)
    }
 
    handleFormInput(abv, series) {
@@ -23,7 +23,7 @@ class ProductFilter extends Component {
       })
    }
 
-   handleChange() {
+   handleChangeFilter() {
       this.setState(
          (prevState) => ({ checked: !prevState.checked }),
          () => { console.log(this.state.checked); }
@@ -36,7 +36,7 @@ class ProductFilter extends Component {
             <ProductFilterMenu
                series={this.state.series}
                abv={this.state.abv}
-               handleChange={this.handleChange}
+               handleChangeFilter={this.handleChangeFilter}
             />
 
             <ProductFilterResults

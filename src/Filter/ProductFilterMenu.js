@@ -12,7 +12,7 @@ class ProductFilterMenu extends Component {
                <p>
                   <label>
                      <p></p>
-                     <input type="checkbox" onChange={() => { this.props.handleChange() }} />
+                     <input type="checkbox" onChange={() => { this.props.handleChangeFilter() }} />
                      <span>Крепость меньше 8</span>
                   </label>
                </p>
