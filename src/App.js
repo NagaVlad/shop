@@ -8,6 +8,8 @@ import Search from './Search'
 import ProductFilter from './Filter/ProductFilter'
 // import ProductItem from './ProductItem'
 
+import Modal from './Modal'
+
 
 import ProductLayout from './ProductLayout'
 
@@ -21,19 +23,22 @@ export default class App extends React.Component {
       cart: [],
       isEmpty: 'true',
       total: 0,
-      itog: [],
+      itog: [],//То что в дате
       offset: 0,
-      data: [],
+      // data: [],
       perPage: 9,
       currentPage: 0,
       postData: [],
-      slice: [],
+      slice: [],//Пагинация
       checkChecked: [],
       arrayRef: [],
-      searchProducts: [],
+      searchProducts: [],//Найденный продукт
 
       searchString: '',
-      startArraySearch: []
+      startArraySearch: [],//Все товары
+
+
+      modal2: true
     }
   }
 
@@ -82,7 +87,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.receivedData()
-    this.searching()
+    this.searching()//!!
   }
 
   addCart = (Name, e, index) => {
@@ -103,9 +108,20 @@ export default class App extends React.Component {
       )
     } else {
       console.log('Удаляю')
-      const refIndex = this.state.startArraySearch.findIndex((el) => el.id === Name)//!!!!!Важно
-      this.deleteHandler2(index[refIndex])
-      // console.log('Че по галке удаляем', index[0]);
+      //////
+      const testArray = []
+      this.state.cart.map((el, index) => {
+        return testArray.push(el[0])
+      })
+      ///////
+
+      const refIndex = testArray.indexOf(index)
+      // this.deleteHandler2(index[refIndex])
+      console.log('this.state.cart', this.state.cart);
+      console.log('index', testArray);
+      console.log('что нашел', this.state.arrayRef);
+
+      this.deleteHandler2(refIndex)
     }
   }
 
@@ -210,8 +226,9 @@ export default class App extends React.Component {
 
         {/* Layout */}
         <ProductLayout
-          // slice={this.state.startArraySearch}
-          slice={this.state.slice}
+          // slice={this.state.itog}//Сделал так
+          slice={this.state.searchProducts}//Сделал так
+          // slice={this.state.slice}
           arrayRef={this.state.arrayRef}
           addCart={this.addCart}
         />
@@ -252,9 +269,14 @@ export default class App extends React.Component {
           <Registration close={() => this.setState({ modalReg: false })} />
         ) : null}
 
-
         {/* Фильтр */}
         {/* <ProductFilter data={this.state.itog} /> */}
+
+
+        {/* <Modal
+          modal2={this.state.modal2}
+          setActive={this.setModalActive}
+        /> */}
       </>
     )
   }
