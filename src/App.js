@@ -7,11 +7,15 @@ import ReactPaginate from 'react-paginate'
 import Search from './Search'
 import ProductFilter from './Filter/ProductFilter'
 // import ProductItem from './ProductItem'
+import About from './About'
+import Main from './Main'
+import { Route, NavLink, Switch, Redirect } from 'react-router-dom'
 
 import Modal from './Modal'
 
 
 import ProductLayout from './ProductLayout'
+import HomeLayout from './HomeLayout'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -194,14 +198,40 @@ export default class App extends React.Component {
   render() {
     return (
       <>
-        <h1 style={{ textAlign: 'center' }}>Каталог товаров</h1>
-        {/* <input type='text' value={this.state.searchString} onChange={(e) => this.handleChange(e)} /> */}
+
+        <div className="container ">
+          <nav className="navig ">
+            <ul className="navigation">
+              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                <li>
+                  <NavLink
+                    to="/">Каталог товаров</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/about">О магазине</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/main">Контакты</NavLink>
+                </li>
+                <li>
+                  <button className='btn btn green'
+                    onClick={() => { this.setState({ modal: true }) }}>Корзина</button>
+                </li>
+                <li>
+                  <button className='btn btn blue'
+                    onClick={() => this.setState({ modalReg: true })}>Регистрация</button>
+                </li>
+              </div>
+            </ul>
+          </nav>
+        </div>
+
 
         {/*Вынести ------- */}
-        <div className="container">
+        {/* <div className="container">
           <div style={{ display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
             <button
-              className='btn green'
+              className='btn pink lighten-3'
               onClick={() => {
                 this.setState({ modal: true })
               }}>
@@ -209,13 +239,20 @@ export default class App extends React.Component {
             </button>
 
             <button
-              className='btn blue'
+              className='btn pink lighten-3'
               onClick={() => this.setState({ modalReg: true })}>
               Регистрация
           </button>
           </div>
-        </div>
+        </div> */}
         {/*Вынести ------- */}
+
+        <h1 style={{ textAlign: 'center' }}>Каталог товаров</h1>
+        {/* <input type='text' value={this.state.searchString} onChange={(e) => this.handleChange(e)} /> */}
+
+
+
+
 
         {/* Поиск */}
         <Search
@@ -224,17 +261,38 @@ export default class App extends React.Component {
         // data={this.state.itog}
         />
 
+        {/* Router */}
+        <Route path="/" exact render={() => <HomeLayout
+          // slice={this.state.itog}//Сделал так
+          slice={this.state.startArraySearch}//!!ТУТ ЕСТЬ ОШИБКА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          // slice={this.state.slice}
+          arrayRef={this.state.arrayRef}
+          addCart={this.addCart}
+          pageCount={this.state.pageCount}
+        // pageCount={this.state.pageCount}
+        />}
+
+        />
+        {/* <Route path="/" exact component={ProductLayout} /> */}
+        <Route path="/about" exact component={About} />
+        <Route path="/main" exact component={Main} />
+        {/* <Switch>
+            <Route path="/About">
+              <About />
+            </Route>
+          </Switch> */}
+
         {/* Layout */}
-        <ProductLayout
+        {/* <ProductLayout
           // slice={this.state.itog}//Сделал так
           slice={this.state.searchProducts}//Сделал так
           // slice={this.state.slice}
           arrayRef={this.state.arrayRef}
           addCart={this.addCart}
-        />
+        /> */}
 
         {/* Пагинация */}
-        <div className="container">
+        {/* <div className="container">
           <div className="row">
             <ReactPaginate
               previousLabel={'prev'}
@@ -250,7 +308,7 @@ export default class App extends React.Component {
               activeClassName={'active'}
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Корзина */}
         {this.state.modal ? (
@@ -272,12 +330,13 @@ export default class App extends React.Component {
         {/* Фильтр */}
         {/* <ProductFilter data={this.state.itog} /> */}
 
-
         {/* <Modal
           modal2={this.state.modal2}
           setActive={this.setModalActive}
         /> */}
       </>
+
+
     )
   }
 }
