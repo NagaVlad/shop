@@ -3,49 +3,35 @@ import Cart from "./Cart";
 import Registration from "./Registration";
 import "./App.css";
 import axios from "axios";
-import ReactPaginate from "react-paginate";
 import Search from "./Search";
 import ProductFilter from "./Filter/ProductFilter";
-// import ProductItem from './ProductItem'
 import About from "./About";
 import Main from "./Main";
-import { Route, NavLink, Switch, Redirect } from "react-router-dom";
-
-import Modal from "./Modal";
-
-import ProductLayout from "./ProductLayout";
 import HomeLayout from "./HomeLayout";
+import { Route, NavLink, Switch, Redirect } from "react-router-dom";
+import ReactPaginate from "react-paginate";
+import Modal from "./Modal";
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal: false,
-      modalReg: false,
-      cart: [],
-      isEmpty: "true",
-      total: 0,
-      itog: [], //То что в дате
-      offset: 0,
-      // data: [],
-      perPage: 9,
-      currentPage: 0,
-      postData: [],
-      slice: [], //Пагинация
-      checkChecked: [],
-      arrayRef: [],
-      searchProducts: [], //Найденный продукт
-      searchString: "",
-      startArraySearch: [], //Все товары
-      modal2: true,
-      //ФИЛЬТР
-      series: 0,
-      abv: 12,
-      checked2: false,
-      filtredProduct: [],
-      /////////////////
       data: [],
       filtredByNameData: [],
+      cart: [],
+      arrayRef: [],
+      modal: false,
+      modalReg: false,
+      checkedFilter: false,
+      isEmpty: "true",
+      searchString: "",
+      abv: 12,
+      total: 0,
+      offset: 0,
+      perPage: 9,
+      currentPage: 0,
+      // slice: [],
+      // modal2: true,
     };
 
     this.handleFormInputFilter = this.handleFormInputFilter.bind(this);
@@ -88,65 +74,35 @@ export default class App extends React.Component {
     });
   }
 
-  // var data = []
-  // if (this.state.searchString.length > 0) {
-  //   data = this.state.searchProducts
-  //   // data = res.data
-  //   console.log('data', data);
-  // } else {
-  //   data = res.data
-  //   console.log('data', data);
-  // }
-
   // const slice = data.slice(
   //   this.state.offset,
   //   this.state.offset + this.state.perPage
   // )
-
-  // const arrayRef = Array.from({
-  //   length: this.state.startArraySearch.length,
-  // }).map(() => React.createRef())
-
-  // this.setState({
-  //   pageCount: Math.ceil(data.length / this.state.perPage),
-  //   itog: data,//Зависит от строки поиска
-  //   arrayRef,
-  //   slice,
-  //   startArraySearch: res.data//Данные с API
-  // })
 
   componentDidMount() {
     this.receivedData();
     this.searching();
   }
 
-  addToCart = (itemId) => {
-    const Product = this.state.data.find((elem) => {
-      return elem.id === itemId;
-    });
+  addToCart = (itemId, e) => {
+    if (e.target.checked) {
+      const Product = this.state.data.find((elem) => {
+        return elem.id === itemId;
+      });
 
-    const { id, name, image_url } = Product;
-    const newArr = [id, name, image_url];
+      const { id, name, image_url } = Product;
+      const newArr = [id, name, image_url];
 
-    this.setState(
-      {
-        cart: this.state.cart.concat([newArr]),
-        isEmpty: "false",
-      },
-      this.counterHandler
-    );
-
-    // // console.log('Удаляю')
-    // const testArray = []
-    // this.state.cart.map((el, index) => {
-    //   return testArray.push(el[0])
-    // })
-    // const refIndex = testArray.indexOf(itemId)
-    // // this.deleteHandler2(index[refIndex])
-    // // console.log('this.state.cart', this.state.cart);
-    // // console.log('index', testArray);
-    // // console.log('что нашел', this.state.arrayRef);
-    // this.deleteHandler2(refIndex)
+      this.setState(
+        {
+          cart: this.state.cart.concat([newArr]),
+          isEmpty: "false",
+        },
+        this.counterHandler
+      );
+    } else {
+      this.buttonDeleteClickHandler(itemId);
+    }
   };
 
   counterHandler = () => {
@@ -157,25 +113,34 @@ export default class App extends React.Component {
     });
   };
 
-  deleteHandler2(index) {
-    this.state.cart.splice(index, 1);
-    this.setState(
-      (prevState) => ({ cart: [...prevState.cart] }),
-      this.counterHandler
-    );
-    console.log("Новое", this.state.cart);
-  }
-
   buttonDeleteClickHandler = (id) => {
     const index = this.state.cart.findIndex((el) => el[0] === id);
 
     const globalIndex = this.state.filtredByNameData.findIndex(
       (el) => el.id === id
     );
+    this.state.cart.splice(index, 1);
+    this.setState(
+      (prevState) => ({
+        cart: [...prevState.cart],
+      }),
+      this.counterHandler
+    );
+  };
 
-    // console.log('arrayRef', this.state.arrayRef);
-
-    // this.state.arrayRef[globalIndex].current.checked = false;
+  buttonDeleteClickHandler2 = (id) => {
+    const index = this.state.cart.findIndex((el) => el[0] === id);
+    const globalIndex = this.state.filtredByNameData.findIndex(
+      (el) => el.id === id
+    );
+    console.log("arrayRef", this.state.arrayRef);
+    console.log("globalIndex", globalIndex);
+    console.log("index", index);
+    console.log(
+      "ПРОВЕРКА ЧЕКБОКСА",
+      this.state.arrayRef[globalIndex].current.checked
+    );
+    console.log("BYAFFFFFFF", this.state.cart);
 
     this.state.cart.splice(index, 1);
     this.setState(
@@ -184,6 +149,7 @@ export default class App extends React.Component {
       }),
       this.counterHandler
     );
+    this.state.arrayRef[globalIndex].current.checked = false;
   };
 
   //*ПОИСК
@@ -223,48 +189,44 @@ export default class App extends React.Component {
   }
 
   //*ФИЛЬТР
-  handleFormInputFilter(abv, series) {
+  handleFormInputFilter(abv) {
     this.setState({
-      series: series,
       abv: abv,
     });
   }
 
   handleChangeFilter() {
     this.setState(
-      (prevState) => ({ checked2: !prevState.checked2 }),
+      (prevState) => ({ checkedFilter: !this.state.checkedFilter }),
       () => {
-        console.log(this.state.checked2);
+        if (this.state.checkedFilter) {
+          this.handleFiltred();
+        } else {
+          this.setState((prevState) => ({
+            filtredByNameData: prevState.data,
+          }));
+        }
       }
     );
   }
 
   handleFiltred() {
     var results = [];
-
-    this.state.startArraySearch.map((product) => {
+    this.state.data.map((product) => {
       if (this.state.abv < product.abv) {
         results.push(product);
-        console.log("Фильтрованный", results);
+        this.setState({
+          filtredByNameData: results,
+        });
+      } else {
       }
-      this.state.filtredProduct = results;
-      // this.setState({
-      //   filtredProduct: [1]
-      // })
     });
-
-    console.log("Фильтрую");
-    console.log("startArraySearch", this.state.startArraySearch);
-    console.log("filtredProduct", (this.state.filtredProduct = results));
-    // this.setState(
-    //   (prevState) => ({ filtredProduct: results }),
-    //   () => { console.log(this.state.filtredProduct); }
-    // )
   }
 
   render() {
     return (
       <>
+        {/* Меню */}
         <div className="container ">
           <nav className="navig ">
             <ul className="navigation">
@@ -301,29 +263,18 @@ export default class App extends React.Component {
           </nav>
         </div>
 
-        {/*Вынести ------- */}
-        {/* <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
-            <button
-              className='btn pink lighten-3'
-              onClick={() => {
-                this.setState({ modal: true })
-              }}>
-              Корзина
-            </button>
-
-            <button
-              className='btn pink lighten-3'
-              onClick={() => this.setState({ modalReg: true })}>
-              Регистрация
-          </button>
-          </div>
-        </div> */}
-        {/*Вынести ------- */}
-
         <h1 style={{ textAlign: "center" }}>Каталог товаров</h1>
-        {/* <input type='text' value={this.state.searchString} onChange={(e) => this.handleChange(e)} /> */}
 
+        <div className="container">
+          {/* Фильтр */}
+          <ProductFilter
+            abv={this.state.abv}
+            handleChangeFilter={this.handleChangeFilter}
+            data={this.state.data}
+            abv={this.state.abv}
+            checked={this.state.checked}
+          />
+        </div>
         {/* Поиск */}
         <Search
           handleChange={this.handleChange}
@@ -337,54 +288,18 @@ export default class App extends React.Component {
           exact
           render={() => (
             <HomeLayout
-              // slice={this.state.itog}//Сделал так
-              filtredByNameData={this.state.filtredByNameData} //!!ТУТ ЕСТЬ ОШИБКА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-              // slice={this.state.slice}
+              filtredByNameData={this.state.filtredByNameData}
               arrayRef={this.state.arrayRef}
               addToCart={this.addToCart}
               pageCount={this.state.pageCount}
               buttonDeleteClickHandler={this.buttonDeleteClickHandler}
-
               // pageCount={this.state.pageCount}
+              // slice={this.state.slice}
             />
           )}
         />
-        {/* <Route path="/" exact component={ProductLayout} /> */}
         <Route path="/about" exact component={About} />
         <Route path="/main" exact component={Main} />
-        {/* <Switch>
-            <Route path="/About">
-              <About />
-            </Route>
-          </Switch> */}
-
-        {/* Layout */}
-        {/* <ProductLayout
-          // slice={this.state.itog}//Сделал так
-          slice={this.state.searchProducts}//Сделал так
-          // slice={this.state.slice}
-          arrayRef={this.state.arrayRef}
-          addCart={this.addCart}
-        /> */}
-
-        {/* Пагинация */}
-        {/* <div className="container">
-          <div className="row">
-            <ReactPaginate
-              previousLabel={'prev'}
-              nextLabel={'next'}
-              breakLabel={'...'}
-              breakClassName={'break-me'}
-              pageCount={this.state.pageCount}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={this.handlePageClick}
-              containerClassName={'pagination'}
-              subContainerClassName={'pages pagination'}
-              activeClassName={'active'}
-            />
-          </div>
-        </div> */}
 
         {/* Корзина */}
         {this.state.modal ? (
@@ -393,7 +308,7 @@ export default class App extends React.Component {
             cart={this.state.cart}
             isEmpty={this.state.isEmpty}
             total={this.state.total}
-            buttonDeleteClickHandler={this.buttonDeleteClickHandler}
+            buttonDeleteClickHandler={this.buttonDeleteClickHandler2}
             // ref={this.state.arrayRef}//
           />
         ) : null}
@@ -402,19 +317,6 @@ export default class App extends React.Component {
         {this.state.modalReg ? (
           <Registration close={() => this.setState({ modalReg: false })} />
         ) : null}
-
-        {/* Фильтр */}
-        <ProductFilter
-          data={this.state.itog}
-          series={this.state.series}
-          abv={this.state.abv}
-          handleChangeFilter={this.handleChangeFilter}
-          data={this.state.data}
-          abv={this.state.abv}
-          checked={this.state.checked}
-        />
-
-        {this.state.checked2 ? this.handleFiltred() : null}
 
         {/* <Modal
           modal2={this.state.modal2}

@@ -1,16 +1,13 @@
-import React from 'react'
-import './App.css'
-import ProductItem from './ProductItem'
+import React from "react";
+import "./App.css";
+import ProductItem from "./ProductItem";
 
 export default class ProductLayout extends React.Component {
-
-
-   render() {
-      return (
-         <div className='row'>
-            <h3 style={{ textAlign: 'center', color: 'black' }}>Товары</h3>
-
-            {/* {this.props.slice.map((pd, index) => (
+  render() {
+    return (
+      <div className="row">
+        <h3 style={{ textAlign: "center", color: "black" }}>Товары</h3>
+        {/* {this.props.slice.map((pd, index) => (
                <ProductItem
                   pd={pd}
                   key={index}
@@ -19,20 +16,16 @@ export default class ProductLayout extends React.Component {
                />
             ))} */}
 
-            {/* {console.log('this.props.slice', this.props.slice)} */}
-            {this.props.filtredByNameData.map((pd, index) => (
-               <ProductItem
-                  pd={pd}
-                  key={index}
-                  ref={this.props.arrayRef[index]}
-                  addToCart={this.props.addToCart}
-                  buttonDeleteClickHandler={this.props.buttonDeleteClickHandler}
-               />
-            ))}
-
-            {/* {console.log(this.props)} */}
-
-         </div>
-      )
-   }
+        {this.props.filtredByNameData.map((pd, index) => (
+          <ProductItem
+            pd={pd}
+            key={index}
+            ref={this.props.arrayRef[index]}
+            addToCart={this.props.addToCart}
+            buttonDeleteClickHandler={this.props.buttonDeleteClickHandler}
+          />
+        ))}
+      </div>
+    );
+  }
 }

@@ -8,27 +8,11 @@ const ProducItem = (props) => {
   useEffect(() => {
     if (checked) {
       addToCart(pd.id);
+      console.log("Добавляю");
     } else {
       buttonDeleteClickHandler(pd.id);
     }
   }, [checked]);
-
-  ////////////////
-  // const deleteProductFrom = () => {
-  //    const index = this.state.cart.findIndex((el) => el[0] === pd.id)
-
-  //    const globalIndex = this.state.filtredByNameData.findIndex((el) => el.id === pd.id)
-
-  //    this.state.cart.splice(index, 1)
-  //    this.setState(
-  //       (prevState) => ({
-  //          cart: [...prevState.cart],
-  //       }),
-  //       this.counterHandler
-  //    )
-  // }
-
-  ////////////
 
   return (
     <div className="col s3 offset-s1">
@@ -45,8 +29,8 @@ const ProducItem = (props) => {
             <input
               ref={innerRef}
               type="checkbox"
-              // onChange={(e) => addToCart(pd.id)}
-              onChange={(e) => setCheked(innerRef.current.checked)}
+              onChange={(e) => addToCart(pd.id, e)}
+              //   onChange={(e) => setCheked(innerRef.current.checked)}
               // onChange={(e) => addCart(pd.name, e, pd.id)}
             />
             <span>Добавить в корзину</span>
