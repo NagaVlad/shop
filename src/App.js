@@ -7,10 +7,8 @@ import Search from "./Search";
 import ProductFilter from "./Filter/ProductFilter";
 import About from "./About";
 import Main from "./Main";
+import { Route, NavLink } from "react-router-dom";
 import HomeLayout from "./HomeLayout";
-import { Route, NavLink, Switch, Redirect } from "react-router-dom";
-import ReactPaginate from "react-paginate";
-import Modal from "./Modal";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -33,9 +31,12 @@ export default class App extends React.Component {
       // slice: [],
       // modal2: true,
     };
-
     this.handleFormInputFilter = this.handleFormInputFilter.bind(this);
     this.handleChangeFilter = this.handleChangeFilter.bind(this);
+  }
+
+  componentDidMount() {
+    this.receivedData();
   }
 
   handlePageClick = (e) => {
@@ -52,57 +53,41 @@ export default class App extends React.Component {
     );
   };
 
-  async receivedData() {
-    const { data } = await axios.get(`https://api.punkapi.com/v2/beers`);
-    console.log(data);
-    this.setState(
-      {
-        data,
-        filtredByNameData: data,
-      },
-      () => this.handlerRef()
-    );
-  }
-
-  handlerRef() {
-    const arrayRef = Array.from({
-      length: this.state.filtredByNameData.length,
-    }).map(() => React.createRef());
-
+  receivedData = async () => {
+    let { data } = await axios.get(`https://api.punkapi.com/v2/beers`);
+    data = data.map((el) => ({
+      ...el,
+      isChecked: false,
+      ref: React.createRef(),
+    }));
     this.setState({
-      arrayRef,
+      data,
+      filtredByNameData: [...data],
     });
-  }
+  };
 
-  // const slice = data.slice(
-  //   this.state.offset,
-  //   this.state.offset + this.state.perPage
-  // )
-
-  componentDidMount() {
-    this.receivedData();
-    this.searching();
-  }
-
-  addToCart = (itemId, e) => {
-    if (e.target.checked) {
-      const Product = this.state.data.find((elem) => {
-        return elem.id === itemId;
-      });
-
-      const { id, name, image_url } = Product;
-      const newArr = [id, name, image_url];
-
-      this.setState(
-        {
-          cart: this.state.cart.concat([newArr]),
-          isEmpty: "false",
-        },
-        this.counterHandler
-      );
+  changeProductItemCheckedStatus = ({ id, isChecked, input }) => {
+    // console.log((input.current.checked = isChecked))
+    const productItem = this.state.data.find((el) => el.id === id);
+    // const globalIndex = this.state.filtredByNameData.indexOf(productItem)
+    productItem.isChecked = isChecked;
+    if (isChecked) {
+      this.state.cart.push(productItem);
     } else {
-      this.buttonDeleteClickHandler(itemId);
+      const index = this.state.cart.indexOf(productItem);
+      if (index > -1) {
+        this.state.cart.splice(index, 1);
+      }
     }
+    this.setState(
+      (prevState) => ({
+        filtredByNameData: [...prevState.filtredByNameData],
+        cart: [...prevState.cart],
+      }),
+      () => {
+        input.current && (input.current.checked = isChecked);
+      }
+    );
   };
 
   counterHandler = () => {
@@ -113,48 +98,8 @@ export default class App extends React.Component {
     });
   };
 
-  buttonDeleteClickHandler = (id) => {
-    const index = this.state.cart.findIndex((el) => el[0] === id);
-
-    const globalIndex = this.state.filtredByNameData.findIndex(
-      (el) => el.id === id
-    );
-    this.state.cart.splice(index, 1);
-    this.setState(
-      (prevState) => ({
-        cart: [...prevState.cart],
-      }),
-      this.counterHandler
-    );
-  };
-
-  buttonDeleteClickHandler2 = (id) => {
-    const index = this.state.cart.findIndex((el) => el[0] === id);
-    const globalIndex = this.state.filtredByNameData.findIndex(
-      (el) => el.id === id
-    );
-    console.log("arrayRef", this.state.arrayRef);
-    console.log("globalIndex", globalIndex);
-    console.log("index", index);
-    console.log(
-      "ПРОВЕРКА ЧЕКБОКСА",
-      this.state.arrayRef[globalIndex].current.checked
-    );
-    console.log("BYAFFFFFFF", this.state.cart);
-
-    this.state.cart.splice(index, 1);
-    this.setState(
-      (prevState) => ({
-        cart: [...prevState.cart],
-      }),
-      this.counterHandler
-    );
-    this.state.arrayRef[globalIndex].current.checked = false;
-  };
-
   //*ПОИСК
   handleChange = (e) => {
-    console.log("e", e.target.value);
     this.setState(
       {
         searchString: e.target.value,
@@ -163,7 +108,7 @@ export default class App extends React.Component {
     );
   };
 
-  searching() {
+  searching = () => {
     let searchString = this.state.searchString.trim().toLowerCase();
 
     if (searchString.length > 0) {
@@ -176,17 +121,20 @@ export default class App extends React.Component {
           filtredByNameData,
         },
         () => {
-          console.log("ОТФИЛЬТРОВАННЫЙ", this.state.filtredByNameData);
+          console.log(this.state.data);
         }
-        // searchProducts: products,
-        // searchString
       );
     } else {
-      this.setState({
-        filtredByNameData: this.state.data,
-      });
+      this.setState(
+        {
+          filtredByNameData: [...this.state.data],
+        },
+        () => {
+          console.log(this.state.data);
+        }
+      );
     }
-  }
+  };
 
   //*ФИЛЬТР
   handleFormInputFilter(abv) {
@@ -198,6 +146,7 @@ export default class App extends React.Component {
   handleChangeFilter() {
     this.setState(
       (prevState) => ({ checkedFilter: !this.state.checkedFilter }),
+      // () => console.log("Соятояние фильтра", this.state.checkedFilter)
       () => {
         if (this.state.checkedFilter) {
           this.handleFiltred();
@@ -226,7 +175,6 @@ export default class App extends React.Component {
   render() {
     return (
       <>
-        {/* Меню */}
         <div className="container ">
           <nav className="navig ">
             <ul className="navigation">
@@ -264,22 +212,9 @@ export default class App extends React.Component {
         </div>
 
         <h1 style={{ textAlign: "center" }}>Каталог товаров</h1>
-
-        <div className="container">
-          {/* Фильтр */}
-          <ProductFilter
-            abv={this.state.abv}
-            handleChangeFilter={this.handleChangeFilter}
-            data={this.state.data}
-            abv={this.state.abv}
-            checked={this.state.checked}
-          />
-        </div>
-        {/* Поиск */}
         <Search
           handleChange={this.handleChange}
           searchString={this.state.searchString}
-          // data={this.state.itog}
         />
 
         {/* Router */}
@@ -288,28 +223,24 @@ export default class App extends React.Component {
           exact
           render={() => (
             <HomeLayout
-              filtredByNameData={this.state.filtredByNameData}
-              arrayRef={this.state.arrayRef}
-              addToCart={this.addToCart}
+              filtredByNameData={this.state.filtredByNameData} //!!ТУТ ЕСТЬ ОШИБКА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
               pageCount={this.state.pageCount}
-              buttonDeleteClickHandler={this.buttonDeleteClickHandler}
+              changeProductItemCheckedStatus={
+                this.changeProductItemCheckedStatus
+              }
+
               // pageCount={this.state.pageCount}
-              // slice={this.state.slice}
             />
           )}
         />
         <Route path="/about" exact component={About} />
         <Route path="/main" exact component={Main} />
-
         {/* Корзина */}
         {this.state.modal ? (
           <Cart
             close={() => this.setState({ modal: false })}
             cart={this.state.cart}
-            isEmpty={this.state.isEmpty}
-            total={this.state.total}
-            buttonDeleteClickHandler={this.buttonDeleteClickHandler2}
-            // ref={this.state.arrayRef}//
+            changeProductItemCheckedStatus={this.changeProductItemCheckedStatus}
           />
         ) : null}
 
@@ -317,6 +248,17 @@ export default class App extends React.Component {
         {this.state.modalReg ? (
           <Registration close={() => this.setState({ modalReg: false })} />
         ) : null}
+
+        {/* Фильтр */}
+        <ProductFilter
+          series={this.state.series}
+          abv={this.state.abv}
+          data={this.state.data}
+          checked={this.state.checked}
+          handleChangeFilter={this.handleChangeFilter}
+        />
+        {/* 
+        {this.state.checked2 ? this.handleFiltred() : null} */}
 
         {/* <Modal
           modal2={this.state.modal2}
