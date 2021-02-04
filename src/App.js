@@ -9,8 +9,12 @@ import About from "./About";
 import Main from "./Main";
 import { Route, NavLink } from "react-router-dom";
 import HomeLayout from "./HomeLayout";
+import { connect } from "react-redux";
 
-export default class App extends React.Component {
+import Counter from './Counter'
+import { add } from './redux/actions/actions'
+
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -173,6 +177,7 @@ export default class App extends React.Component {
   }
 
   render() {
+    console.log("APP", this.props);
     return (
       <>
         <div className="container ">
@@ -229,7 +234,7 @@ export default class App extends React.Component {
                 this.changeProductItemCheckedStatus
               }
 
-              // pageCount={this.state.pageCount}
+            // pageCount={this.state.pageCount}
             />
           )}
         />
@@ -264,7 +269,27 @@ export default class App extends React.Component {
           modal2={this.state.modal2}
           setActive={this.setModalActive}
         /> */}
+
+        <button onClick={this.props.onAdd}>Redux</button>
+        <h4>ФЛАГ {this.props.counter}</h4>
+
+
+        <Counter />
       </>
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    counter: state.counter1.counter,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onAdd: () => dispatch(add()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
