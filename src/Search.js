@@ -1,9 +1,9 @@
 import React from 'react'
 
 class Search extends React.Component {
-  state = {
-    searchString: '',
-  }
+  // state = {
+  //   searchString: '',
+  // }
 
   render() {
     return (

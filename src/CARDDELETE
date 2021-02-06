@@ -1,42 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux';
 import { closeModal } from './redux/actions/actions';
-import { addToCart } from './redux/actions/actions'
-import { changeProductItemCheckedStatus } from './mainFunc'
-
+import { changeProductItemCheckedStatus } from './redux/actions/actions'
 class Cart extends React.Component {
   componentDidMount() {
     console.log('Корзина', this.props.cart)
   }
-
-
-  // changeProductItemCheckedStatus = ({ id, isChecked, input }) => {
-  //   // console.log((input.current.checked = isChecked))
-  //   const productItem = this.props.data.find((el) => el.id === id);
-  //   // const globalIndex = this.state.filtredByNameData.indexOf(productItem)
-  //   productItem.isChecked = isChecked;
-  //   if (isChecked) {
-  //     this.props.cart.push(productItem);
-  //   } else {
-  //     const index = this.props.cart.indexOf(productItem);
-  //     if (index > -1) {
-  //       this.props.cart.splice(index, 1);//НАДО ЛИ ВЫНОСИТЬ ЭТО В REDUx
-  //     }
-  //   }
-  //   this.props.addToCart(this.props.cart)
-
-  //   this.setState(
-  //     (prevState) => ({
-  //       // filtredByNameData: [...prevState.filtredByNameData],
-  //       // cart: [...prevState.cart],
-  //     }),
-  //     () => {
-  //       input.current && (input.current.checked = isChecked);
-  //     }
-  //   );
-  // };
-
-
   render() {
     console.log(this.props);
     return (
@@ -67,11 +36,11 @@ class Cart extends React.Component {
                     <div className='col s3'>
                       <button
                         onClick={(e) => {
-                          changeProductItemCheckedStatus({
+                          this.props.changeProductItemCheckedStatus({
                             id: elem.id,
                             isChecked: false,
                             input: elem.ref,
-                          }, this.props)
+                          })
                         }}
                         className='btn red'>
                         Удалить
@@ -93,8 +62,8 @@ class Cart extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    modal: state.appReducer.modal,
     cart: state.appReducer.cart,
-    data: state.appReducer.data,
   }
 }
 
@@ -104,9 +73,8 @@ function mapDispatchToProps(dispatch) {
     closeModal: () => {
       dispatch(closeModal())
     },
-    addToCart: (data) => dispatch(addToCart(data)),
 
-    // changeProductItemCheckedStatus: (data) => dispatch(changeProductItemCheckedStatus(data))
+    changeProductItemCheckedStatus: (data) => dispatch(changeProductItemCheckedStatus(data))
   }
 }
 

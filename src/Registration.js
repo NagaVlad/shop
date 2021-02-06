@@ -1,6 +1,7 @@
 import React from 'react';
-
-export default class Registration extends React.Component {
+import { connect } from 'react-redux';
+import { closeModal2 } from './redux/actions/actions';
+class Registration extends React.Component {
 
    onNameChange = this.onNameChange.bind(this);
    onSurnameChange = this.onSurnameChange.bind(this);
@@ -65,7 +66,7 @@ export default class Registration extends React.Component {
          <div className="modal_wrap__reg">
             <div className="modal_window">
                <h1>Регистрация</h1>
-               <i className="material-icons modal_close" onClick={this.props.close}>close</i>
+               <i className="material-icons modal_close" onClick={() => this.props.closeModal()}>close</i>
                <div className="row">
                   <form className="col s12">
                      <div className="row">
@@ -126,3 +127,18 @@ export default class Registration extends React.Component {
       )
    }
 }
+
+function mapStateToProps(state) {
+   return {
+      modal: state.appReducer.modal,
+   }
+}
+
+function mapDispatchToProps(dispatch) {
+   return {
+      closeModal: () => { dispatch(closeModal2()) }
+   }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Registration)

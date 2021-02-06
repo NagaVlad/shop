@@ -1,21 +1,25 @@
+
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { changeProductItemCheckedStatus } from './mainFunc'
+import { addToCart } from './redux/actions/actions'
 
 class ProducItem extends Component {
   constructor(props) {
-    const { pd, innerRef, changeProductItemCheckedStatus } = props
+    const { pd, innerRef } = props
     super(props)
     this.state = {
       ref: pd.ref,
     }
   }
-  onChangeHandler = (func, obj) => {
-    func(obj)
-  }
+  // onChangeHandler = (func, obj) => {
+  //   func(obj)
+  // }
   render() {
     const {
       pd,
       innerRef,
-      changeProductItemCheckedStatus,
+      // changeProductItemCheckedStatus,
       isChecked,
     } = this.props
     return (
@@ -31,15 +35,15 @@ class ProducItem extends Component {
           <div className='card-action'>
             <label>
               <input
-                checked={isChecked}
+                checked={pd.isChecked}//!!ДОБАВИЛ
                 ref={this.state.ref}
                 type='checkbox'
                 onChange={() => {
-                  this.onChangeHandler(changeProductItemCheckedStatus, {
+                  changeProductItemCheckedStatus({
                     id: pd.id,
                     isChecked: this.state.ref.current.checked,
                     input: this.state.ref,
-                  })
+                  }, this.props)
                 }}
               />
               <span>Добавить в корзину</span>
@@ -51,7 +55,20 @@ class ProducItem extends Component {
   }
 }
 
-export default ProducItem
+function mapStateToProps(state) {
+  return {
+    cart: state.appReducer.cart,
+    data: state.appReducer.data,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    addToCart: (data) => dispatch(addToCart(data)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProducItem)
 // (e) => {
 //   console.log(innerRef)
 // changeProductItemCheckedStatus({

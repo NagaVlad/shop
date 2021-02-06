@@ -12,24 +12,22 @@ import HomeLayout from "./HomeLayout";
 import { connect } from "react-redux";
 
 import Counter from './Counter'
-import {
-  add, showCart, showReg, setDataFilter, addToCart,
-  changeFiltredByNameData, changeFilterFlag
-} from './redux/actions/actions'
+import { add, showCart, showReg, setDataFilter, addToCart } from './redux/actions/actions'
+
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // data: [],
-      // filtredByNameData: [],
-      // cart: [],
+      data: [],
+      filtredByNameData: [],
+      cart: [],
       // arrayRef: [], не используется
       // !!!
       // modal: false,
       // modalReg: false,
       //!!!
-      // checkedFilter: false,
+      checkedFilter: false,
       searchString: "",
       isEmpty: "true",
       abv: 12,
@@ -71,34 +69,45 @@ class App extends React.Component {
     }));
 
     this.setState({
-      // data,
-      // filtredByNameData: [...data],
+      data,
+      filtredByNameData: [...data],
     });
 
     this.props.setDataFilter(data)
   };
 
-  // changeProductItemCheckedStatus = ({ id, isChecked, input }) => {
-  //   // console.log((input.current.checked = isChecked))
-  //   const productItem = this.props.data.find((el) => el.id === id);
-  //   // const globalIndex = this.state.filtredByNameData.indexOf(productItem)
-  //   productItem.isChecked = isChecked;
-  //   if (isChecked) {
-  //     this.props.cart.push(productItem);
-  //   } else {
-  //     const index = this.props.cart.indexOf(productItem);
-  //     if (index > -1) {
-  //       this.props.cart.splice(index, 1);
-  //     }
-  //   }
-  //   this.props.addToCart(this.props.cart)
+  changeProductItemCheckedStatus = ({ id, isChecked, input }) => {
+    // console.log((input.current.checked = isChecked))
+    const productItem = this.state.data.find((el) => el.id === id);
+    // const globalIndex = this.state.filtredByNameData.indexOf(productItem)
+    productItem.isChecked = isChecked;
+    if (isChecked) {
+      this.state.cart.push(productItem);
+    } else {
+      const index = this.state.cart.indexOf(productItem);
+      if (index > -1) {
+        this.state.cart.splice(index, 1);//НАДО ЛИ ВЫНОСИТЬ ЭТО В REDUx
+      }
+    }
 
-  //   input.current && (input.current.checked = isChecked);
-  // };
+
+    this.props.addToCart(this.state.cart)
+
+    this.setState(
+      (prevState) => ({
+        filtredByNameData: [...prevState.filtredByNameData],
+        cart: [...prevState.cart],
+      }),
+      () => {
+        input.current && (input.current.checked = isChecked);
+      }
+    );
+
+  };
 
   counterHandler = () => {
     this.setState({
-      total: this.props.cart.reduce((acc, currentValue) => {
+      total: this.state.cart.reduce((acc, currentValue) => {
         return Number(acc) + Number(currentValue[0]);
       }, 0),
     });
@@ -118,34 +127,27 @@ class App extends React.Component {
     let searchString = this.state.searchString.trim().toLowerCase();
 
     if (searchString.length > 0) {
-      let filtredByNameData = this.props.data.filter((el) => {
+      let filtredByNameData = this.state.data.filter((el) => {
         return el.name.toLowerCase().match(searchString);
       });
 
-
-      this.props.changeFiltredByNameData(filtredByNameData)
-
       this.setState(
         {
-          // filtredByNameData,
+          filtredByNameData,
         },
         () => {
-          console.log(this.props.data);
+          console.log(this.state.data);
         }
       );
     } else {
-
-
       this.setState(
         {
-          // filtredByNameData: [...this.props.data],
+          filtredByNameData: [...this.state.data],
         },
         () => {
-          console.log(this.props.data);
+          console.log(this.state.data);
         }
       );
-      this.props.changeFiltredByNameData(this.props.data)
-
     }
   };
 
@@ -157,45 +159,28 @@ class App extends React.Component {
   }
 
   handleChangeFilter() {
-    this.props.changeFilterFlag(this.props.checkedFilter)
-    if (this.props.checkedFilter) {
-      console.log("TRUEEEEEEEE!!!!!!!");
-      this.handleFiltred();
-    } else {
-      console.log("FALSE!!!!!!");
-      this.props.changeFiltredByNameData(this.props.data)
-    }
-    // this.setState(
-    //   (prevState) => ({ checkedFilter: !this.state.checkedFilter }),
-    //   // () => console.log("Соятояние фильтра", this.state.checkedFilter)
-    //   () => {
-    //     if (this.state.checkedFilter) {
-    //       this.handleFiltred();
-    //     } else {
-    //       this.props.changeFiltredByNameData(this.props.data)
-    //       this.setState((prevState) => ({
-    //         // filtredByNameData: prevState.data,
-
-    //         // filtredByNameData: this.props.data,
-    //       }));
-    //     }
-    //   }
-    // );
-
-    ///////////////////////
-
+    this.setState(
+      (prevState) => ({ checkedFilter: !this.state.checkedFilter }),
+      // () => console.log("Соятояние фильтра", this.state.checkedFilter)
+      () => {
+        if (this.state.checkedFilter) {
+          this.handleFiltred();
+        } else {
+          this.setState((prevState) => ({
+            filtredByNameData: prevState.data,
+          }));
+        }
+      }
+    );
   }
 
   handleFiltred() {
     var results = [];
-    this.props.data.map((product) => {
+    this.state.data.map((product) => {
       if (this.state.abv < product.abv) {
         results.push(product);
-        console.log('ПУШУ В МАССИВ');
-        this.props.changeFiltredByNameData(results)
-
         this.setState({
-          // filtredByNameData: results,
+          filtredByNameData: results,
         });
       } else {
       }
@@ -256,11 +241,11 @@ class App extends React.Component {
           exact
           render={() => (
             <HomeLayout
-              // filtredByNameData={this.props.filtredByNameData} //!!ТУТ ЕСТЬ ОШИБКА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              filtredByNameData={this.state.filtredByNameData} //!!ТУТ ЕСТЬ ОШИБКА!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
               pageCount={this.state.pageCount}
-            // changeProductItemCheckedStatus={
-            //   this.changeProductItemCheckedStatus
-            // }
+              changeProductItemCheckedStatus={
+                this.changeProductItemCheckedStatus
+              }
 
             // pageCount={this.state.pageCount}
             />
@@ -271,9 +256,9 @@ class App extends React.Component {
         {/* Корзина */}
         {this.props.modal ? (
           <Cart
-          // close={() => this.setState({ modal: false })}
-          // cart={this.props.cart}
-          // changeProductItemCheckedStatus={this.changeProductItemCheckedStatus}
+            // close={() => this.setState({ modal: false })}
+            cart={this.state.cart}
+            changeProductItemCheckedStatus={this.changeProductItemCheckedStatus}
           // total={this.state.total}
           />
         ) : null}
@@ -287,7 +272,7 @@ class App extends React.Component {
         <ProductFilter
           series={this.state.series}
           abv={this.state.abv}
-          data={this.props.data}
+          data={this.state.data}
           checked={this.state.checked}
           handleChangeFilter={this.handleChangeFilter}
         />
@@ -317,9 +302,7 @@ function mapStateToProps(state) {
 
     data: state.appReducer.data,
     filtredByNameData: state.appReducer.filtredByNameData,
-    cart: state.appReducer.cart,
-
-    checkedFilter: state.appReducer.checkedFilter
+    cart: state.appReducer.cart
   };
 }
 
@@ -328,11 +311,12 @@ function mapDispatchToProps(dispatch) {
     onAdd: () => dispatch(add()),
     showCart: () => dispatch(showCart()),
     showReg: () => dispatch(showReg()),
+
     setDataFilter: (data) => dispatch(setDataFilter(data)),
-    addToCart: (data) => dispatch(addToCart(data)),
-    changeFiltredByNameData: (data) => dispatch(changeFiltredByNameData(data)),
-    changeFilterFlag: (data) => dispatch(changeFilterFlag(data))
+    addToCart: (data) => dispatch(addToCart(data))
+
     // receivedData: prevState => dispatch(receivedData())
+
   };
 }
 

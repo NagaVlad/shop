@@ -1,8 +1,9 @@
 import React, { createRef } from 'react'
 import './App.css'
 import ProductItem from './ProductItem'
+import { connect } from 'react-redux'
 
-export default class ProductLayout extends React.Component {
+class ProductLayout extends React.Component {
   render() {
     return (
       <div className='row'>
@@ -23,11 +24,11 @@ export default class ProductLayout extends React.Component {
             <ProductItem
               pd={pd}
               key={pd.id}
-              isChecked={pd.isChecked}
+              // isChecked={pd.isChecked}//!!УБРАЛИ
               addToCart={this.props.addToCart}
-              changeProductItemCheckedStatus={
-                this.props.changeProductItemCheckedStatus
-              }
+            // changeProductItemCheckedStatus={
+            //   this.props.changeProductItemCheckedStatus
+            // }
             />
           )
         })}
@@ -37,3 +38,32 @@ export default class ProductLayout extends React.Component {
     )
   }
 }
+function mapStateToProps(state) {
+  return {
+    filtredByNameData: state.appReducer.filtredByNameData,
+    data: state.appReducer.data,
+
+    counter: state.counter1.counter,
+    modal: state.appReducer.modal,
+    modalReg: state.appReducer.modalReg,
+    cart: state.appReducer.cart,
+    checkedFilter: state.appReducer.checkedFilter
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    // onAdd: () => dispatch(add()),
+    // showCart: () => dispatch(showCart()),
+    // showReg: () => dispatch(showReg()),
+    // setDataFilter: (data) => dispatch(setDataFilter(data)),
+    // addToCart: (data) => dispatch(addToCart(data)),
+    // changeFiltredByNameData: (data) => dispatch(changeFiltredByNameData(data)),
+    // changeFilterFlag: (data) => dispatch(changeFilterFlag(data))
+    // receivedData: prevState => dispatch(receivedData())
+  };
+}
+
+
+export default connect(mapStateToProps)(ProductLayout, mapDispatchToProps);
+// export default ProductLayout;
