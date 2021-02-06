@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { changeProductItemCheckedStatus } from './mainFunc'
-import { addToCart } from './redux/actions/actions'
+import { addToCart, setTotal } from './redux/actions/actions'
 
 class ProducItem extends Component {
   constructor(props) {
@@ -65,6 +65,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addToCart: (data) => dispatch(addToCart(data)),
+    setTotal: (data) => dispatch(setTotal(data)),
   }
 }
 

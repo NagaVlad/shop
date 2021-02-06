@@ -3,7 +3,9 @@ import {
    CLOSE, CLOSE2, GET_DATA_AND_FILTRED,
    ADD_TO_CART, CHANGE_FILTER_BY_NAME,
    CHANGE_FILTER_FLAG,
-   CHANGE_PRODUCT_ITEM_CHECKED_STATUS
+   CHANGE_PRODUCT_ITEM_CHECKED_STATUS,
+   SET_CURRENTPAGE, SET_OFFSET,
+   SET_TOTAL, CHANGE_IS_EMPTY
 } from './actionTypes'
 // export function add2(number) {
 export function add() {
@@ -75,6 +77,40 @@ export function changeFilterFlag(data) {
       })
    }
 }
+
+export function changeCurrentPaga(data) {
+   return (dispatch) => {
+      dispatch({
+         type: SET_CURRENTPAGE,
+         payload: data
+      })
+   }
+}
+export function changeOfsset(data) {
+   return (dispatch) => {
+      dispatch({
+         type: SET_OFFSET,
+         payload: data
+      })
+   }
+}
+export function setTotal(data) {
+   return (dispatch) => {
+      dispatch({
+         type: SET_TOTAL,
+         payload: data
+      })
+   }
+}
+
+// export function cnahgeIsEmpty() {
+//    return (dispatch) => {
+//       dispatch({
+//          type: CHANGE_IS_EMPTY,
+//       })
+//    }
+// }
+
 
 // export function changeProductItemCheckedStatus(data) {
 //    console.log('ПРИШЛА ДАТА С КОРЗИНЫ', data);

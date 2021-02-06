@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import { addToCart } from './redux/actions/actions'
 
 export function changeProductItemCheckedStatus({ id, isChecked, input }, props) {
-   console.log('props', props);
+
+
+   // console.log('props', props);
    // console.log((input.current.checked = isChecked))
    const productItem = props.data.find((el) => el.id === id);
    console.log('productItem', productItem);
@@ -19,28 +21,26 @@ export function changeProductItemCheckedStatus({ id, isChecked, input }, props) 
    }
    props.addToCart(props.cart)
 
+   ////////////////////////////////////
+   let total = props.cart.reduce((acc, currentValue) => {
+      console.log('acc', acc);
+      console.log('currentValue', currentValue);
+      return Number(acc) + Number(currentValue.id);
+   }, 0)
+
+   console.log('ТОТАЛ_____', total);
+
+   props.setTotal(total)
+   // console.log('props.cart', props.cart);
+   // console.log('ТОТАЛ_____-', total);
+
+   ////////////////////////////////////
+
    input.current && (input.current.checked = isChecked);
 };
 
-// function mapStateToProps(state) {
-//    return {
-//       counter: state.counter1.counter,
-//       modal: state.appReducer.modal,
-//       modalReg: state.appReducer.modalReg,
 
-//       data: state.appReducer.data,
-//       filtredByNameData: state.appReducer.filtredByNameData,
-//       cart: state.appReducer.cart,
 
-//       checkedFilter: state.appReducer.checkedFilter
-//    };
-// }
 
-// function mapDispatchToProps(dispatch) {
-//    return {
 
-//       addToCart: (data) => dispatch(addToCart(data)),
-//    };
-// }
 
-// export default connect(mapStateToProps, mapDispatchToProps)(changeProductItemCheckedStatus);

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { connect } from "react-redux";
 class ProductFilterMenu extends Component {
   render() {
     return (
@@ -22,5 +22,12 @@ class ProductFilterMenu extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    abv: state.appReducer.abv,
+  };
+}
 
-export default ProductFilterMenu;
+
+// export default ProductFilterMenu;
+export default connect(mapStateToProps)(ProductFilterMenu);

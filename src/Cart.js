@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { closeModal } from './redux/actions/actions';
-import { addToCart } from './redux/actions/actions'
+import { closeModal, setTotal } from './redux/actions/actions';
+import { addToCart, cnahgeIsEmpty } from './redux/actions/actions'
 import { changeProductItemCheckedStatus } from './mainFunc'
 
 class Cart extends React.Component {
@@ -36,22 +36,26 @@ class Cart extends React.Component {
   //   );
   // };
 
-
+  componentWillMount() {
+    document.body.style.overflow = "hidden";
+  }
   render() {
     console.log(this.props);
     return (
       <>
-        <div className='modal_wrap'>
-          <div className='modal_window'>
+        <div className='modal_wrap activitis' onClick={() => { document.body.style.overflow = "visible"; return this.props.closeModal() }}>
+          <div className='modal_window' onClick={(e) => e.stopPropagation()} >
             <i
               className='material-icons modal_close'
-              onClick={() => this.props.closeModal()}>
+              onClick={() => { document.body.style.overflow = "visible"; return this.props.closeModal() }}>
               close
             </i>
             <h3>Корзина</h3>
             <hr />
-            {/* {this.props.cart.length >= 1 ? this.setState({ isEmpty: 'false' }) : 'null'} */}
-            {/* {this.props.isEmpty === 'false' ? null : <h3 className="grey-text">Нет добавленных продуктов</h3>} */}
+            {/* {this.props.cart.length > 0 ? cnahgeIsEmpty() : this.props.isEmpty} */}
+            {/* {console.log('СОСТОЯНИЕ КОРЗИНЫ', this.props.isEmpty)} */}
+            {this.props.cart.length > 0 ? null : <h3 className="grey-text">Нет добавленных продуктов</h3>}
+            {/* {this.props.isEmpty === false ? null : <h3 className="grey-text">Нет добавленных продуктов</h3>} */}
 
             {this.props.cart.map((elem, index) => (
               // this.countTotal(elem[0])
@@ -82,7 +86,7 @@ class Cart extends React.Component {
                 </div>
               </div>
             ))}
-            {/* <h4>Итоговая сумма: {this.props.total}</h4> */}
+            <h4>Итоговая сумма: {this.props.total}</h4>
             {console.log('cart', this.props)}
           </div>
         </div>
@@ -95,6 +99,8 @@ function mapStateToProps(state) {
   return {
     cart: state.appReducer.cart,
     data: state.appReducer.data,
+    total: state.appReducer.total,
+    // isEmpty: state.appReducer.isEmpty
   }
 }
 
@@ -105,7 +111,8 @@ function mapDispatchToProps(dispatch) {
       dispatch(closeModal())
     },
     addToCart: (data) => dispatch(addToCart(data)),
-
+    setTotal: (data) => dispatch(setTotal(data)),
+    // cnahgeIsEmpty: () => dispatch(cnahgeIsEmpty())
     // changeProductItemCheckedStatus: (data) => dispatch(changeProductItemCheckedStatus(data))
   }
 }

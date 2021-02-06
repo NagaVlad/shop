@@ -6,7 +6,7 @@ class ProductFilter extends Component {
     return (
       <>
         <ProductFilterMenu
-          abv={this.props.abv}
+          // abv={this.props.abv}
           handleChangeFilter={this.props.handleChangeFilter}
         />
       </>

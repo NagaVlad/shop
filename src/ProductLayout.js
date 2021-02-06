@@ -24,8 +24,8 @@ class ProductLayout extends React.Component {
             <ProductItem
               pd={pd}
               key={pd.id}
-              // isChecked={pd.isChecked}//!!УБРАЛИ
-              addToCart={this.props.addToCart}
+            // isChecked={pd.isChecked}//!!УБРАЛИ
+            // addToCart={this.props.addToCart}//** */
             // changeProductItemCheckedStatus={
             //   this.props.changeProductItemCheckedStatus
             // }

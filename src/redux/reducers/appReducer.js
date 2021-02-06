@@ -1,17 +1,25 @@
 import {
    CLOSE, CLOSE2, SHOW, SHOW2, GET_DATA_AND_FILTRED, ADD_TO_CART, CHANGE_FILTER_BY_NAME,
    CHANGE_FILTER_FLAG,
-   CHANGE_PRODUCT_ITEM_CHECKED_STATUS
+   CHANGE_PRODUCT_ITEM_CHECKED_STATUS, SET_CURRENTPAGE, SET_OFFSET,
+   SET_TOTAL, CHANGE_IS_EMPTY
 } from '../actions/actionTypes'
+
 const initialState = {
    modal: false,
    modalReg: false,
    checkedFilter: true,
-
    data: [],
    filtredByNameData: [],
    cart: [],
    arrayRef: [],
+
+   total: 0,
+   offset: 0,
+   perPage: 9,
+   currentPage: 0,
+   abv: 12,
+   // isEmpty: true
 
 }
 
@@ -58,6 +66,27 @@ export default function appReducer(state = initialState, action) {
             ...state,
             checkedFilter: !action.payload,
          }
+
+      case SET_CURRENTPAGE:
+         return {
+            ...state,
+            currentPage: action.payload,
+         }
+      case SET_OFFSET:
+         return {
+            ...state,
+            offset: action.payload,
+         }
+      case SET_TOTAL:
+         return {
+            ...state,
+            total: action.payload,
+         }
+      // case CHANGE_IS_EMPTY:
+      //    return {
+      //       ...state,
+      //       isEmpty: false,
+      //    }
 
       default:
          return state

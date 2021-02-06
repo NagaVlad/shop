@@ -7,8 +7,8 @@ export default class HomeLayout extends React.Component {
     return (
       <div>
         <ProductLayout
-          // filtredByNameData={this.props.filtredByNameData} //Сделал так
-          addToCart={this.props.addToCart}
+        // filtredByNameData={this.props.filtredByNameData} //Сделал так
+        // addToCart={this.props.addToCart}//** */
         // changeProductItemCheckedStatus={
         //   this.props.changeProductItemCheckedStatus
         // }

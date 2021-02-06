@@ -14,7 +14,8 @@ import { connect } from "react-redux";
 import Counter from './Counter'
 import {
   add, showCart, showReg, setDataFilter, addToCart,
-  changeFiltredByNameData, changeFilterFlag
+  changeFiltredByNameData, changeFilterFlag,
+  changeCurrentPaga, changeOfsset
 } from './redux/actions/actions'
 
 class App extends React.Component {
@@ -30,27 +31,37 @@ class App extends React.Component {
       // modalReg: false,
       //!!!
       // checkedFilter: false,
+      // isEmpty: "true",
+
       searchString: "",
-      isEmpty: "true",
-      abv: 12,
-      total: 0,
+      // abv: 12,
+      // total: 0,
       offset: 0,
       perPage: 9,
       currentPage: 0,
       // slice: [],
       // modal2: true,
     };
-    this.handleFormInputFilter = this.handleFormInputFilter.bind(this);
+    // this.handleFormInputFilter = this.handleFormInputFilter.bind(this);
     this.handleChangeFilter = this.handleChangeFilter.bind(this);
   }
 
   componentDidMount() {
     this.receivedData();
+    // document.body.style.overflow = "visible";
   }
+  // componentWillMount() {
+  //   document.body.style.overflow = "visible";
+  // }
 
   handlePageClick = (e) => {
     const selectedPage = e.selected;
-    const offset = selectedPage * this.state.perPage;
+    const offset = selectedPage * this.props.perPage;
+    this.receivedData();
+
+    this.props.changeCurrentPaga(selectedPage)
+    this.props.changeOfsset(offset)
+
     this.setState(
       {
         currentPage: selectedPage,
@@ -96,13 +107,13 @@ class App extends React.Component {
   //   input.current && (input.current.checked = isChecked);
   // };
 
-  counterHandler = () => {
-    this.setState({
-      total: this.props.cart.reduce((acc, currentValue) => {
-        return Number(acc) + Number(currentValue[0]);
-      }, 0),
-    });
-  };
+  // counterHandler = () => {
+  //   this.setState({
+  //     total: this.props.cart.reduce((acc, currentValue) => {
+  //       return Number(acc) + Number(currentValue[0]);
+  //     }, 0),
+  //   });
+  // };
 
   //*ПОИСК
   handleChange = (e) => {
@@ -150,11 +161,11 @@ class App extends React.Component {
   };
 
   //*ФИЛЬТР
-  handleFormInputFilter(abv) {
-    this.setState({
-      abv: abv,
-    });
-  }
+  // handleFormInputFilter(abv) {
+  //   this.setState({
+  //     abv: abv,
+  //   });
+  // }
 
   handleChangeFilter() {
     this.props.changeFilterFlag(this.props.checkedFilter)
@@ -189,7 +200,7 @@ class App extends React.Component {
   handleFiltred() {
     var results = [];
     this.props.data.map((product) => {
-      if (this.state.abv < product.abv) {
+      if (this.props.abv < product.abv) {
         results.push(product);
         console.log('ПУШУ В МАССИВ');
         this.props.changeFiltredByNameData(results)
@@ -286,7 +297,7 @@ class App extends React.Component {
         {/* Фильтр */}
         <ProductFilter
           series={this.state.series}
-          abv={this.state.abv}
+          // abv={this.state.abv}
           data={this.props.data}
           checked={this.state.checked}
           handleChangeFilter={this.handleChangeFilter}
@@ -318,8 +329,13 @@ function mapStateToProps(state) {
     data: state.appReducer.data,
     filtredByNameData: state.appReducer.filtredByNameData,
     cart: state.appReducer.cart,
+    checkedFilter: state.appReducer.checkedFilter,
 
-    checkedFilter: state.appReducer.checkedFilter
+    abv: state.appReducer.abv,
+    total: state.appReducer.total,
+    offset: state.appReducer.offset,
+    perPage: state.appReducer.perPage,
+    currentPage: state.appReducer.currentPage,
   };
 }
 
@@ -331,7 +347,10 @@ function mapDispatchToProps(dispatch) {
     setDataFilter: (data) => dispatch(setDataFilter(data)),
     addToCart: (data) => dispatch(addToCart(data)),
     changeFiltredByNameData: (data) => dispatch(changeFiltredByNameData(data)),
-    changeFilterFlag: (data) => dispatch(changeFilterFlag(data))
+    changeFilterFlag: (data) => dispatch(changeFilterFlag(data)),
+
+    changeCurrentPaga: (data) => dispatch(changeCurrentPaga(data)),
+    changeOfsset: (data) => dispatch(changeOfsset(data))
     // receivedData: prevState => dispatch(receivedData())
   };
 }
