@@ -178,6 +178,7 @@ class App extends React.Component {
             />
           )}
         />
+        {/* //ДОБАВИЛ */}
         <Route path="/shop/about" exact component={About} />
         <Route path="/shop/main" exact component={Main} />
         <Route path="/shop/" exact component={Main} />
