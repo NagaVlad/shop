@@ -2,7 +2,7 @@
   "name": "myapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://nagavlad.github.io/shop/cart",
+  "homepage": "https://nagavlad.github.io/shop",
   "dependencies": {
     "-": "^0.0.1",
     "@testing-library/jest-dom": "^5.11.4",

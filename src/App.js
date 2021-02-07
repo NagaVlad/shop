@@ -164,7 +164,7 @@ class App extends React.Component {
 
         {/* Router */}
         <Route
-          path="/shop/cart"
+          path="/cart"
           exact
           render={() => (
             <HomeLayout
@@ -179,9 +179,9 @@ class App extends React.Component {
           )}
         />
         {/* //ДОБАВИЛ */}
-        <Route path="/shop/about" exact component={About} />
-        <Route path="/shop/main" exact component={Main} />
-        <Route path="/shop/" exact component={Main} />
+        <Route path="/about" exact component={About} />
+        <Route path="/main" exact component={Main} />
+        <Route path="/" exact component={Main} />
         {/* Корзина */}
         {this.props.modal ? (
           <Cart />
