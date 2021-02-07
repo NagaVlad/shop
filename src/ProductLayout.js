@@ -7,9 +7,10 @@ class ProductLayout extends React.Component {
   render() {
     return (
       <div className='row'>
-        <h3 style={{ textAlign: 'center', color: 'black' }}>Товары</h3>
+        <div className='container'>
+          <h3 style={{ textAlign: 'center', color: 'black' }}>Товары</h3>
 
-        {/* {this.props.slice.map((pd, index) => (
+          {/* {this.props.slice.map((pd, index) => (
                <ProductItem
                   pd={pd}
                   key={index}
@@ -18,22 +19,23 @@ class ProductLayout extends React.Component {
                />
             ))} */}
 
-        {/* {console.log('this.props.slice', this.props.slice)} */}
-        {this.props.filtredByNameData.map((pd, index) => {
-          return (
-            <ProductItem
-              pd={pd}
-              key={pd.id}
-            // isChecked={pd.isChecked}//!!УБРАЛИ
-            // addToCart={this.props.addToCart}//** */
-            // changeProductItemCheckedStatus={
-            //   this.props.changeProductItemCheckedStatus
-            // }
-            />
-          )
-        })}
+          {/* {console.log('this.props.slice', this.props.slice)} */}
+          {this.props.filtredByNameData.map((pd, index) => {
+            return (
+              <ProductItem
+                pd={pd}
+                key={pd.id}
+              // isChecked={pd.isChecked}//!!УБРАЛИ
+              // addToCart={this.props.addToCart}//** */
+              // changeProductItemCheckedStatus={
+              //   this.props.changeProductItemCheckedStatus
+              // }
+              />
+            )
+          })}
 
-        {/* {console.log(this.props)} */}
+          {/* {console.log(this.props)} */}
+        </div>
       </div>
     )
   }

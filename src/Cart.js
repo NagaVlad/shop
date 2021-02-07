@@ -50,7 +50,7 @@ class Cart extends React.Component {
               onClick={() => { document.body.style.overflow = "visible"; return this.props.closeModal() }}>
               close
             </i>
-            <h3>Корзина</h3>
+            <h3 style={{ textAlign: 'center' }}>Корзина</h3>
             <hr />
             {/* {this.props.cart.length > 0 ? cnahgeIsEmpty() : this.props.isEmpty} */}
             {/* {console.log('СОСТОЯНИЕ КОРЗИНЫ', this.props.isEmpty)} */}

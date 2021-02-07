@@ -65,7 +65,7 @@ class Registration extends React.Component {
       return (
          <div className="modal_wrap__reg" onClick={() => this.props.closeModal()}>
             <div className="modal_window" onClick={(e) => e.stopPropagation()}>
-               <h1>Регистрация</h1>
+               <h1 >Регистрация</h1>
                <i className="material-icons modal_close" onClick={() => this.props.closeModal()}>close</i>
                <div className="row">
                   <form className="col s12">

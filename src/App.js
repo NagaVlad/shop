@@ -255,11 +255,22 @@ class App extends React.Component {
           </nav>
         </div>
 
-        <h1 style={{ textAlign: "center" }}>Каталог товаров</h1>
+        <h1 style={{ textAlign: "center" }}><i class="medium material-icons">shopping_cart</i>Каталог товаров<i class="medium material-icons">shopping_cart</i></h1>
         <Search
           handleChange={this.handleChange}
           searchString={this.state.searchString}
         />
+
+        <div className="container">
+          {/* Фильтр */}
+          <ProductFilter
+            // series={this.state.series}//!!
+            // abv={this.state.abv}
+            // data={this.props.data}//!!
+            checked={this.state.checked}
+            handleChangeFilter={this.handleChangeFilter}
+          />
+        </div>
 
         {/* Router */}
         <Route
@@ -294,14 +305,6 @@ class App extends React.Component {
           <Registration close={() => this.setState({ modalReg: false })} />
         ) : null}
 
-        {/* Фильтр */}
-        <ProductFilter
-          series={this.state.series}
-          // abv={this.state.abv}
-          data={this.props.data}
-          checked={this.state.checked}
-          handleChangeFilter={this.handleChangeFilter}
-        />
         {/* 
         {this.state.checked2 ? this.handleFiltred() : null} */}
 
@@ -310,11 +313,10 @@ class App extends React.Component {
           setActive={this.setModalActive}
         /> */}
 
-        <button onClick={this.props.onAdd}>Redux</button>
+        {/*УДАЛИТЬ  */}
+        {/* <button onClick={this.props.onAdd}>Redux</button>
         <h4>ФЛАГ {this.props.counter}</h4>
-
-
-        <Counter />
+        <Counter /> */}
       </>
     );
   }
