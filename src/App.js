@@ -111,7 +111,7 @@ class App extends React.Component {
             <ul className="navigation">
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 <li>
-                  <NavLink to="/">Каталог товаров</NavLink>
+                  <NavLink to="/shop">Каталог товаров</NavLink>
                 </li>
                 <li>
                   <NavLink to="/about">О магазине</NavLink>
@@ -119,9 +119,6 @@ class App extends React.Component {
                 <li>
                   <NavLink to="/main">Контакты</NavLink>
                 </li>
-                {/* <li>
-                  <NavLink to="/">Контакты</NavLink>
-                </li> */}
                 <li>
                   <button
                     className="btn btn green"
@@ -164,7 +161,7 @@ class App extends React.Component {
 
         {/* Router */}
         <Route
-          path="/"
+          path="/shop/"
           exact
           render={() => (
             <HomeLayout
@@ -178,10 +175,8 @@ class App extends React.Component {
             />
           )}
         />
-        {/* //ДОБАВИЛ */}
         <Route path="/about" exact component={About} />
         <Route path="/main" exact component={Main} />
-        {/* <Route path="/" exact component={Main} /> */}
         {/* Корзина */}
         {this.props.modal ? (
           <Cart />
