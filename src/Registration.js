@@ -71,22 +71,18 @@ class Registration extends React.Component {
                   <form className="col s12">
                      <div className="row">
                         <div className="input-field col s6">
-                           {/* <input onChange={this.onNameChange} placeholder="Имя" id="first_name" type="text" value={this.state.name}  /> */}
                            {this.state.validName === 'true' ? <p style={{ color: 'green' }}>Успешно<i className="material-icons">check</i></p> : <p><i className="material-icons">block</i></p>}
                            <input onChange={this.onNameChange} placeholder="Имя" id="first_name" type="text" />
-                           {/* <label for="first_name">First Name</label> */}
                         </div>
                         <div className="input-field col s6">
                            {this.state.validSurname === 'true' ? <p style={{ color: 'green' }}>Успешно<i className="material-icons">check</i></p> : <p><i className="material-icons">block</i></p>}
                            <input onChange={this.onSurnameChange} placeholder="Фамилия" id="last_name" type="text" />
-                           {/* <label for="last_name">Last Name</label> */}
                         </div>
                      </div>
 
                      <div className="row">
                         <div className="input-field col s12">
                            <input type="date" className="datepicker" id="pickdate" />
-                           {/* <label for="pickdate">Дата рождения</label> */}
                         </div>
                      </div>
 
@@ -94,7 +90,6 @@ class Registration extends React.Component {
                         <div className="input-field col s12">
                            {this.state.validPassword === 'true' ? <p style={{ color: 'green' }}>Успешно<i className="material-icons">check</i></p> : <p><i className="material-icons">block</i></p>}
                            <input onChange={this.onPasswordChange} placeholder="Введите пароль" id="password" type="password" />
-                           {/* <label for="password">Password</label> */}
                         </div>
                      </div>
 
@@ -102,7 +97,6 @@ class Registration extends React.Component {
                         <div className="input-field col s12">
                            {this.state.validPassword2 === 'true' ? <p style={{ color: 'green' }}>Успешно<i className="material-icons">check</i></p> : <p><i className="material-icons">block</i></p>}
                            <input onChange={this.onPasswordChange2} placeholder="Повторите пароль" id="password2" type="password" />
-                           {/* <label for="password">Password</label> */}
                         </div>
 
                         {this.state.password === this.state.password2 && this.state.password > 5 && this.state.password2 > 5 ? <p style={{ color: 'green' }}>Пароли совпадаю</p> : <p style={{ color: 'red' }}>Пароли не совпадаю</p>}
@@ -111,7 +105,6 @@ class Registration extends React.Component {
                      <div className="row">
                         <div className="input-field col s12">
                            <input placeholder="Email" id="email" type="email" className="validate" />
-                           {/* <label for="email">Email</label> */}
                         </div>
                      </div>
 

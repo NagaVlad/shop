@@ -12,14 +12,11 @@ class ProducItem extends Component {
       ref: pd.ref,
     }
   }
-  // onChangeHandler = (func, obj) => {
-  //   func(obj)
-  // }
+
   render() {
     const {
       pd,
       innerRef,
-      // changeProductItemCheckedStatus,
       isChecked,
     } = this.props
     return (
@@ -27,10 +24,11 @@ class ProducItem extends Component {
         <div className='card'>
           <div className='card-image'>
             <img src={pd.image_url} alt='' />
-            <span className='card-title black-text'>{pd.name}</span>
+            <span style={{ fontSize: 20 }} className='card-title black-text'>{pd.name}</span>
           </div>
           <div className='card-content'>
-            <p>Цена {pd.id}</p>
+            <p style={{ textAlign: 'center' }}><strong>Цена {pd.id} $</strong></p>
+            <p>Фирама производитель {pd.contributed_by}</p>
           </div>
           <div className='card-action'>
             <label>
@@ -70,10 +68,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProducItem)
-// (e) => {
-//   console.log(innerRef)
-// changeProductItemCheckedStatus({
-//   id: pd.id,
-//   isChecked: innerRef.current.checked,
-// })
-// }

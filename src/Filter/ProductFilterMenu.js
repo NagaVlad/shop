@@ -28,6 +28,4 @@ function mapStateToProps(state) {
   };
 }
 
-
-// export default ProductFilterMenu;
 export default connect(mapStateToProps)(ProductFilterMenu);

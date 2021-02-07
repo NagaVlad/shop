@@ -7,7 +7,6 @@ class Counter extends React.Component {
          <div>
             <h3>Counter№2</h3>
             <h5>Значение{this.props.counter2}</h5>
-
             <button onClick={() => this.props.onAdd2()}>Add</button>
          </div>
 
@@ -21,10 +20,8 @@ function mapStateToProps(state) {
    }
 }
 
-
 function mapDispatchToProps(dispatch) {
    return {
-      // onAdd2: () => dispatch({ type: "ADD2" }),
       onAdd2: () => dispatch(add2()),
    };
 }

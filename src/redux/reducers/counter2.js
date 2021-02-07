@@ -9,7 +9,6 @@ export default function counter2(state = initialState, action) {
          return {
             counter2: state.counter2 + 1,
          };
-
       default:
          return state;
    }

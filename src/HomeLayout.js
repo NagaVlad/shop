@@ -7,6 +7,7 @@ export default class HomeLayout extends React.Component {
     return (
       <div>
         <ProductLayout
+        // slice={this.props.slice}//!!
         // filtredByNameData={this.props.filtredByNameData} //Сделал так
         // addToCart={this.props.addToCart}//** */
         // changeProductItemCheckedStatus={
@@ -27,6 +28,8 @@ export default class HomeLayout extends React.Component {
               containerClassName={'pagination'}
               subContainerClassName={'pages pagination'}
               activeClassName={'active'}
+
+            // onPageChange={this.props.handlePageClick}//!!
             />
           </div>
         </div>

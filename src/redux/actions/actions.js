@@ -7,11 +7,10 @@ import {
    SET_CURRENTPAGE, SET_OFFSET,
    SET_TOTAL, CHANGE_IS_EMPTY
 } from './actionTypes'
-// export function add2(number) {
+
 export function add() {
    return {
       type: ADD
-      // payload: number
    }
 }
 export function add2() {
@@ -39,9 +38,7 @@ export function closeModal2() {
       type: CLOSE2,
    }
 }
-
 export function setDataFilter(data) {
-   console.log('ЭТО ACTION pauyload', data);
    return (dispatch) => {
       dispatch({
          type: GET_DATA_AND_FILTRED,
@@ -51,7 +48,6 @@ export function setDataFilter(data) {
 }
 
 export function addToCart(data) {
-   console.log('ЭТО ACTION pauyload', data);
    return (dispatch) => {
       dispatch({
          type: ADD_TO_CART,
@@ -60,7 +56,6 @@ export function addToCart(data) {
    }
 }
 export function changeFiltredByNameData(data) {
-   console.log("DATAAAAAA", data);
    return (dispatch) => {
       dispatch({
          type: CHANGE_FILTER_BY_NAME,
@@ -69,7 +64,6 @@ export function changeFiltredByNameData(data) {
    }
 }
 export function changeFilterFlag(data) {
-   console.log("МЕНЯЮ ФЛАГ");
    return (dispatch) => {
       dispatch({
          type: CHANGE_FILTER_FLAG,
@@ -77,7 +71,6 @@ export function changeFilterFlag(data) {
       })
    }
 }
-
 export function changeCurrentPaga(data) {
    return (dispatch) => {
       dispatch({
@@ -102,41 +95,3 @@ export function setTotal(data) {
       })
    }
 }
-
-// export function cnahgeIsEmpty() {
-//    return (dispatch) => {
-//       dispatch({
-//          type: CHANGE_IS_EMPTY,
-//       })
-//    }
-// }
-
-
-// export function changeProductItemCheckedStatus(data) {
-//    console.log('ПРИШЛА ДАТА С КОРЗИНЫ', data);
-//    console.log("УДАЛЯЕМ ПО КНОПКЕ!!!!!!!!!!!!");
-//    const { id, isChecked, input } = data
-//    return (dispatch, getState) => {
-//       dispatch(() => {
-//          console.log(getState().appReducer);
-//          console.log('УДАЛИЛ', getState().appReducer.data);
-//          const productItem = getState().appReducer.data.find((el) => el.id === id);
-//          productItem.isChecked = isChecked;
-//          if (isChecked) {
-//             getState().appReducer.cart.push(productItem);
-//          } else {
-//             const index = getState().appReducer.cart.indexOf(productItem);
-//             if (index > -1) {
-//                getState().appReducer.cart.splice(index, 1);
-//             }
-//          }
-//          console.log(('КОРЗИНО', getState().appReducer.cart));
-//          dispatch(addToCart(getState().appReducer.cart))
-//       })
-//    }
-// }
-
-
-
-
-

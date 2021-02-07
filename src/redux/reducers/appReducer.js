@@ -13,16 +13,12 @@ const initialState = {
    filtredByNameData: [],
    cart: [],
    arrayRef: [],
-
    total: 0,
    offset: 0,
    perPage: 9,
    currentPage: 0,
    abv: 12,
-   // isEmpty: true
-
 }
-
 
 export default function appReducer(state = initialState, action) {
    console.log(SHOW);
@@ -43,7 +39,6 @@ export default function appReducer(state = initialState, action) {
          return {
             ...state, modalReg: false
          }
-
       case GET_DATA_AND_FILTRED:
          console.log('TEST');
          return {
@@ -66,7 +61,6 @@ export default function appReducer(state = initialState, action) {
             ...state,
             checkedFilter: !action.payload,
          }
-
       case SET_CURRENTPAGE:
          return {
             ...state,
@@ -82,12 +76,6 @@ export default function appReducer(state = initialState, action) {
             ...state,
             total: action.payload,
          }
-      // case CHANGE_IS_EMPTY:
-      //    return {
-      //       ...state,
-      //       isEmpty: false,
-      //    }
-
       default:
          return state
    }

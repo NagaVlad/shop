@@ -8,34 +8,6 @@ class Cart extends React.Component {
   componentDidMount() {
     console.log('Корзина', this.props.cart)
   }
-
-
-  // changeProductItemCheckedStatus = ({ id, isChecked, input }) => {
-  //   // console.log((input.current.checked = isChecked))
-  //   const productItem = this.props.data.find((el) => el.id === id);
-  //   // const globalIndex = this.state.filtredByNameData.indexOf(productItem)
-  //   productItem.isChecked = isChecked;
-  //   if (isChecked) {
-  //     this.props.cart.push(productItem);
-  //   } else {
-  //     const index = this.props.cart.indexOf(productItem);
-  //     if (index > -1) {
-  //       this.props.cart.splice(index, 1);//НАДО ЛИ ВЫНОСИТЬ ЭТО В REDUx
-  //     }
-  //   }
-  //   this.props.addToCart(this.props.cart)
-
-  //   this.setState(
-  //     (prevState) => ({
-  //       // filtredByNameData: [...prevState.filtredByNameData],
-  //       // cart: [...prevState.cart],
-  //     }),
-  //     () => {
-  //       input.current && (input.current.checked = isChecked);
-  //     }
-  //   );
-  // };
-
   componentWillMount() {
     document.body.style.overflow = "hidden";
   }
@@ -52,13 +24,8 @@ class Cart extends React.Component {
             </i>
             <h3 style={{ textAlign: 'center' }}>Корзина</h3>
             <hr />
-            {/* {this.props.cart.length > 0 ? cnahgeIsEmpty() : this.props.isEmpty} */}
-            {/* {console.log('СОСТОЯНИЕ КОРЗИНЫ', this.props.isEmpty)} */}
             {this.props.cart.length > 0 ? null : <h3 className="grey-text">Нет добавленных продуктов</h3>}
-            {/* {this.props.isEmpty === false ? null : <h3 className="grey-text">Нет добавленных продуктов</h3>} */}
-
             {this.props.cart.map((elem, index) => (
-              // this.countTotal(elem[0])
               <div key={elem.id}>
                 <div className='collection'>
                   <div className='collection-item row'>
@@ -100,20 +67,16 @@ function mapStateToProps(state) {
     cart: state.appReducer.cart,
     data: state.appReducer.data,
     total: state.appReducer.total,
-    // isEmpty: state.appReducer.isEmpty
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    // showCart: () => dispatch(showCart()),
     closeModal: () => {
       dispatch(closeModal())
     },
     addToCart: (data) => dispatch(addToCart(data)),
     setTotal: (data) => dispatch(setTotal(data)),
-    // cnahgeIsEmpty: () => dispatch(cnahgeIsEmpty())
-    // changeProductItemCheckedStatus: (data) => dispatch(changeProductItemCheckedStatus(data))
   }
 }
 
