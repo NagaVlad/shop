@@ -111,16 +111,16 @@ class App extends React.Component {
             <ul className="navigation">
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 <li>
-                  <NavLink to="/shop/cart">Каталог товаров</NavLink>
+                  <NavLink to="/cart">Каталог товаров</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/shop/about">О магазине</NavLink>
+                  <NavLink to="/about">О магазине</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/shop/main">Контакты</NavLink>
+                  <NavLink to="/main">Контакты</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/shop/">Контакты</NavLink>
+                  <NavLink to="/">Контакты</NavLink>
                 </li>
                 <li>
                   <button
