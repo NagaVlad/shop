@@ -28,7 +28,7 @@ class ProducItem extends Component {
           </div>
           <div className='card-content'>
             <p style={{ textAlign: 'center' }}><strong>Цена {pd.id} $</strong></p>
-            <p>Фирама производитель {pd.contributed_by}</p>
+            <p style={{ textAlign: 'center' }}>Фирма производитель {pd.contributed_by}</p>
           </div>
           <div className='card-action'>
             <label>
