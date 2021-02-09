@@ -16,7 +16,7 @@ const initialState = {
    total: 0,
    offset: 0,
    perPage: 9,
-   currentPage: 0,
+   currentPage: 1,
    abv: 12,
 }
 

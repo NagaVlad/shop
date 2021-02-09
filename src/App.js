@@ -25,8 +25,11 @@ class App extends React.Component {
       offset: 0,
       perPage: 9,
       currentPage: 0,
+
+      pageCount: 1
     };
     this.handleChangeFilter = this.handleChangeFilter.bind(this);
+    this.handlePageClick = this.handlePageClick.bind(this);
   }
 
   componentDidMount() {
@@ -37,20 +40,22 @@ class App extends React.Component {
     const selectedPage = e.selected;
     const offset = selectedPage * this.props.perPage;
 
-    this.receivedData();
 
     this.props.changeCurrentPaga(selectedPage)
     this.props.changeOfsset(offset)
 
-    // this.setState(
-    //   {
-    //     currentPage: selectedPage,
-    //     offset: offset,
-    //   },
-    //   () => {
-    //     this.receivedData();
-    //   }
-    // );
+
+    this.setState(
+      {
+        currentPage: selectedPage,
+        offset: offset,
+      },
+      () => {
+        // this.receivedData();
+      }
+    );
+
+    // this.receivedData();
   };
 
   receivedData = async () => {
@@ -60,6 +65,13 @@ class App extends React.Component {
       isChecked: false,
       ref: React.createRef(),
     }));
+
+    this.setState({
+      pageCount: Math.ceil(data.length / this.state.perPage),
+    })
+
+    console.log('data.length', data.length);
+    console.log('this.state.perPage', this.state.perPage);
 
     this.props.setDataFilter(data)
   };
@@ -167,11 +179,15 @@ class App extends React.Component {
             <HomeLayout
               // filtredByNameData={this.props.filtredByNameData}
               pageCount={this.state.pageCount}
-            // changeProductItemCheckedStatus={
-            //   this.changeProductItemCheckedStatus
-            // }
+              // changeProductItemCheckedStatus={
+              //   this.changeProductItemCheckedStatus
+              // }
 
-            // pageCount={this.state.pageCount}
+              // pageCount={this.state.pageCount}
+              handlePageClick={this.handlePageClick}
+
+              currentPage={this.state.currentPage}////////////////////
+              offset={this.state.offset}/////////////////////////////////
             />
           )}
         />

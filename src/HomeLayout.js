@@ -7,6 +7,8 @@ export default class HomeLayout extends React.Component {
     return (
       <div>
         <ProductLayout
+        // currentPage={this.props.currentPage}////////////////////
+        // offset={this.props.offset}/////////////////////////////////
         // slice={this.props.slice}//!!
         // filtredByNameData={this.props.filtredByNameData} //Сделал так
         // addToCart={this.props.addToCart}//** */
@@ -29,7 +31,7 @@ export default class HomeLayout extends React.Component {
               subContainerClassName={'pages pagination'}
               activeClassName={'active'}
 
-            // onPageChange={this.props.handlePageClick}//!!
+              onPageChange={this.props.handlePageClick}//!!
             />
           </div>
         </div>
